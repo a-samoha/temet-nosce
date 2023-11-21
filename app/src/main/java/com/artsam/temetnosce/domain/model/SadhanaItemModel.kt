@@ -1,9 +1,9 @@
 package com.artsam.temetnosce.domain.model
 
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.annotation.DrawableRes
 
 data class SadhanaItemModel(
     val id: String,
     val label: String,
-    val icon: ImageVector,
+    @DrawableRes val iconResId: Int,
 )
