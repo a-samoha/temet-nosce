@@ -6,6 +6,7 @@ import androidx.annotation.StringRes
 data class SadhanaItemModel(
     val id: String,
     val label: String,
-    @DrawableRes val iconResId: Int?,
-    @StringRes val timeResId: Int?,
+    @DrawableRes val iconResId: Int? = null,
+    @StringRes val timeResId: Int? = null,
+    @StringRes val placeholder: Int? = null,
 )
