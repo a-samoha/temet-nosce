@@ -1,0 +1,17 @@
+android {
+    compileSdkVersion = libs.versions.compileSdk.get() as int
+
+    defaultConfig {
+        minSdkVersion libs.versions.minSdk.get() as int
+        targetSdkVersion libs.versions.targetSdk.get() as int
+    }
+
+    compileOptions {
+        sourceCompatibility = libs.versions.java.get()
+        targetCompatibility = libs.versions.java.get()
+    }
+}
+
+dependencies {
+//    implementation(libs.kotlin.stdLib)
+}
