@@ -1,4 +1,4 @@
-package com.artsam.temetnosce.ui.sadhana
+package com.artsam.temetnosce.feature.sadhana.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,29 +28,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.artsam.temetnosce.R
 import com.artsam.temetnosce.domain.model.SadhanaItemModel
+import com.artsam.temetnosce.feature.sadhana.R
 
 @Composable
 fun SadhanaScreen() {
     // List of typical elements
     val elements = listOf(
-        SadhanaItemModel("awake", "Подъём", R.drawable.ic_sun),
-        SadhanaItemModel("service", "Служение", R.drawable.ic_feet),
-        SadhanaItemModel("kirtan", "Киртан", R.drawable.ic_musicalnote),
-        SadhanaItemModel("books", "Книги, мин", R.drawable.ic_bookopen),
-        SadhanaItemModel("lectures", "Лекции", R.drawable.ic_headphones1),
-        SadhanaItemModel("sleep", "Сон", R.drawable.ic_moon),
+        SadhanaItemModel("awake", "Подъём", R.drawable.sadhana_ic_sun),
+        SadhanaItemModel("service", "Служение", R.drawable.sadhana_ic_feet),
+        SadhanaItemModel("kirtan", "Киртан", R.drawable.sadhana_ic_musicalnote),
+        SadhanaItemModel("books", "Книги, мин", R.drawable.sadhana_ic_bookopen),
+        SadhanaItemModel("lectures", "Лекции", R.drawable.sadhana_ic_headphones1),
+        SadhanaItemModel("sleep", "Сон", R.drawable.sadhana_ic_moon),
         SadhanaItemModel(
             "japa73",
             "Джапа",
             null,
-            R.string.time_0730,
-            R.string.japa_rounds_placeholder
+            R.string.sadhana_time_0730,
+            R.string.sadhana_japa_rounds_placeholder
         ),
-        SadhanaItemModel("japa10", "", null, R.string.time_1000),
-        SadhanaItemModel("japa18", "", null, R.string.time_1800),
-        SadhanaItemModel("japa24", "", null, R.string.time_2400),
+        SadhanaItemModel("japa10", "", null, R.string.sadhana_time_1000),
+        SadhanaItemModel("japa18", "", null, R.string.sadhana_time_1800),
+        SadhanaItemModel("japa24", "", null, R.string.sadhana_time_2400),
         // Add as many elements as needed
     )
     Column(
@@ -58,7 +58,7 @@ fun SadhanaScreen() {
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        Title(R.string.my_sadhana_today)
+        Title(R.string.sadhana_my_sadhana_today)
         LazyColumn {
             items(elements) { item ->
                 Item(item)
@@ -73,7 +73,7 @@ fun Title(titleRes: Int) {
     Text(
         text = stringResource(titleRes),
         fontWeight = FontWeight.Bold,
-        color = Color(R.color.black),
+        color = Color(R.color.sadhana_black),
         modifier = Modifier
             .padding(bottom = 16.dp)
             .fillMaxWidth(),

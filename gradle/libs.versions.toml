@@ -2,15 +2,16 @@
 # suppress inspection "WrongPropertyKeyValueDelimiter" for whole file
 [versions]
 java                          = "17"
-kotlin                        = "1.9.20"
+kotlin                        = "1.9.21"
+application                   = "8.1.4"
 
 compileSdk                    = "34"
 minSdk                        = "26"
 targetSdk                     = "34"
 versionCode                   = "1"
-versionName                   = "1.0.1"
+versionName                   = "0.0.3"
 
-coroutines                = "1.7.3"
+coroutines                    = "1.7.3"
 
 [plugins]
 #kotlinPlugin                  = "org.jetbrains.kotlin.android:1.8.10"

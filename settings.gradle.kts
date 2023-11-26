@@ -10,12 +10,14 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://www.jitpack.io" ) }
+        maven { url = uri("https://www.jitpack.io") }
     }
 }
 
 rootProject.name = "Temet Nosce"
 
 include(":app")
+
+include(":core:presentation")
 
 include(":feature:sadhana")

@@ -1,4 +1,4 @@
-package com.artsam.temetnosce
+package com.artsam.temetnosce.core.presentation.activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -6,14 +6,14 @@ import androidx.activity.compose.setContent
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.artsam.temetnosce.ui.sadhana.SadhanaScreen
-import com.artsam.temetnosce.ui.theme.TemetNosceTheme
+import com.artsam.temetnosce.core.presentation.theme.TemetNosceAppTheme
+import com.artsam.temetnosce.feature.sadhana.screen.SadhanaScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            TemetNosceTheme {
+            TemetNosceAppTheme {
                 // A surface container using the 'background' color from the theme
                 NavHost(
                     navController = rememberNavController(),

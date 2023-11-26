@@ -1,0 +1,8 @@
+<resources>
+    <string name="sadhana_my_sadhana_today">Моя Садхана сегодня</string>
+    <string name="sadhana_japa_rounds_placeholder">16</string>
+    <string name="sadhana_time_0730">07:30</string>
+    <string name="sadhana_time_1000">10:00</string>
+    <string name="sadhana_time_1800">18:00</string>
+    <string name="sadhana_time_2400">24:00</string>
+</resources>
