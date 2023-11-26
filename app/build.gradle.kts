@@ -1,20 +1,18 @@
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    kotlin("android")
 }
+
+apply(from = "$rootDir/gradle/build_android.gradle")
 
 android {
     namespace = "com.artsam.temetnosce"
-    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.artsam.temetnosce"
-        minSdk = 26
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = Integer.parseInt(libs.versions.versionCode.get())
+        versionName = libs.versions.versionName.get()
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -29,19 +27,7 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
-    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -51,12 +37,11 @@ android {
 
 dependencies {
 
-    implementation(project(":features:sadhana:api"))
-    implementation(project(":features:sadhana:impl"))
+    implementation(project(":feature:sadhana"))
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.kotlin.lifecycleRuntime)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.kotlin.lifecycleRuntime)
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")

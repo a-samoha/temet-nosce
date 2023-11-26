@@ -18,5 +18,4 @@ rootProject.name = "Temet Nosce"
 
 include(":app")
 
-include(":features:sadhana:api")
-include(":features:sadhana:impl")
+include(":feature:sadhana")

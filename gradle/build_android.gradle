@@ -1,17 +1,30 @@
 android {
-    compileSdkVersion = libs.versions.compileSdk.get() as int
+    compileSdk = libs.versions.compileSdk.get() as int
 
     defaultConfig {
-        minSdkVersion libs.versions.minSdk.get() as int
-        targetSdkVersion libs.versions.targetSdk.get() as int
+        minSdk = libs.versions.minSdk.get() as int
+        targetSdk = libs.versions.targetSdk.get() as int
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
 
     compileOptions {
-        sourceCompatibility = libs.versions.java.get()
-        targetCompatibility = libs.versions.java.get()
+        sourceCompatibility = libs.versions.java.get() as int
+        targetCompatibility = libs.versions.java.get() as int
     }
-}
 
-dependencies {
-//    implementation(libs.kotlin.stdLib)
+    kotlinOptions {
+        jvmTarget = libs.versions.java.get()
+    }
+
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.3"
+    }
 }
