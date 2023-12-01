@@ -41,13 +41,7 @@ fun SadhanaScreen() {
         SadhanaItemModel("books", "Книги, мин", R.drawable.sadhana_ic_bookopen),
         SadhanaItemModel("lectures", "Лекции", R.drawable.sadhana_ic_headphones1),
         SadhanaItemModel("sleep", "Сон", R.drawable.sadhana_ic_moon),
-        SadhanaItemModel(
-            "japa73",
-            "Джапа",
-            null,
-            R.string.sadhana_time_0730,
-            R.string.sadhana_japa_rounds_placeholder
-        ),
+        SadhanaItemModel(     "japa73", "Джапа", null, R.string.sadhana_time_0730, R.string.sadhana_japa_rounds_placeholder),
         SadhanaItemModel("japa10", "", null, R.string.sadhana_time_1000),
         SadhanaItemModel("japa18", "", null, R.string.sadhana_time_1800),
         SadhanaItemModel("japa24", "", null, R.string.sadhana_time_2400),

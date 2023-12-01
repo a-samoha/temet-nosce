@@ -12,30 +12,35 @@ versionCode                   = "1"
 versionName                   = "0.0.3"
 
 coroutines                    = "1.7.3"
+room                          = "2.6.1"
 
 [plugins]
-#kotlinPlugin                  = "org.jetbrains.kotlin.android:1.8.10"
-#androidApp                    = "com.android.application:8.1.4"
-#crashlytics                   = "com.google.firebase.crashlytics:2.8.1"
-#googleServices                = "com.google.gms.google-services:4.3.15"
-#performance                   = "com.google.firebase.firebase-perf:1.4.1"
-#apollo                        = "com.apollographql.apollo:2.5.14"
-#navigationSafeArgs            = "androidx.navigation.safeargs.kotlin:2.5.0"
+#kotlinPlugin                 = "org.jetbrains.kotlin.android:1.8.10"
+#androidApp                   = "com.android.application:8.1.4"
+#crashlytics                  = "com.google.firebase.crashlytics:2.8.1"
+#googleServices               = "com.google.gms.google-services:4.3.15"
+#performance                  = "com.google.firebase.firebase-perf:1.4.1"
+#apollo                       = "com.apollographql.apollo:2.5.14"
+#navigationSafeArgs           = "androidx.navigation.safeargs.kotlin:2.5.0"
 
 [libraries]
 androidx-core-ktx             = { module = "androidx.core:core-ktx", version = "1.12.0" }
 androidx-activity-compose     = { module = "androidx.activity:activity-compose", version = "1.8.1" }
 androidx-navigation-compose   = { module = "androidx.navigation:navigation-compose", version = "2.7.5" }
-kotlin-stdLib                 = { module ="org.jetbrains.kotlin:kotlin-stdlib-jdk8", version = "kotlin" }
-kotlin-lifecycleRuntime       = { module ="androidx.lifecycle:lifecycle-runtime-ktx", version = "2.6.2" }
-kotlin-coroutinesCore         = { module ="org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "coroutines" }
+kotlin-lifecycleRuntime       = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version = "2.6.2" }
+kotlin-coroutinesCore         = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlin-stdLib                 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 
 koin-android                  = "io.insert-koin:koin-android:3.4.3"
 
+database-roomRuntime          = { module = "androidx.room:room-runtime", version.ref = "room" }
+database-roomCompiler         = { module = "androidx.room:room-compiler", version.ref = "room" }
+database-roomKtx              = { module = "androidx.room:room-ktx", version.ref = "room" }
+
+google-gson                   = "com.google.code.gson:gson:2.10.1"
+
 okhttp                        = "com.squareup.okhttp3:okhttp:4.11.0"
 okhttp-logging                = "com.squareup.okhttp3:logging-interceptor:4.11.0"
-
-gson                          = "com.google.code.gson:gson:2.10.1"
 
 retrofit-core                 = "com.squareup.retrofit2:retrofit:2.9.0"
 retrofit-scalars              = "com.squareup.retrofit2:converter-scalars:2.9.0"
