@@ -1,10 +1,10 @@
-package com.artsam.temetnosce.feature.sadhana.data.local
+package com.artsam.sadhana.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.artsam.temetnosce.feature.sadhana.data.local.SadhanaDatabase.Companion.DB_VERSION
-import com.artsam.temetnosce.feature.sadhana.data.local.converter.DateConverter
+import com.artsam.sadhana.data.local.SadhanaDatabase.Companion.DB_VERSION
+import com.artsam.sadhana.data.local.converter.DateConverter
 
 @Database(
     version = DB_VERSION,

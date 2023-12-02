@@ -1,6 +1,6 @@
-package com.artsam.temetnosce.feature.sadhana.data
+package com.artsam.sadhana.data
 
-import com.artsam.temetnosce.feature.sadhana.domain.SadhanaDataSource
+import com.artsam.sadhana.domain.SadhanaDataSource
 
 internal class SadhanaRepositoryImpl(
 

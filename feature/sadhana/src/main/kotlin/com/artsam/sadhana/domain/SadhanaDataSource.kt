@@ -1,6 +1,6 @@
-package com.artsam.temetnosce.feature.sadhana.domain
+package com.artsam.sadhana.domain
 
-import com.artsam.temetnosce.feature.sadhana.data.local.SadhanaEntity
+import com.artsam.sadhana.data.local.SadhanaEntity
 
 sealed interface SadhanaDataSource {
 

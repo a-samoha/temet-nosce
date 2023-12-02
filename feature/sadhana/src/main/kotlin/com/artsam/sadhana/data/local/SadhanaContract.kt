@@ -1,4 +1,4 @@
-package com.artsam.temetnosce.feature.sadhana.data.local
+package com.artsam.sadhana.data.local
 
 internal object SadhanaContract {
     const val TABLE = "sadhana"

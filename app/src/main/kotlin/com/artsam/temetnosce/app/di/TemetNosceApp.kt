@@ -1,7 +1,7 @@
 package com.artsam.temetnosce.app.di
 
 import android.app.Application
-import com.artsam.temetnosce.feature.sadhana.di.sadhanaModule
+import com.artsam.sadhana.di.sadhanaModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 

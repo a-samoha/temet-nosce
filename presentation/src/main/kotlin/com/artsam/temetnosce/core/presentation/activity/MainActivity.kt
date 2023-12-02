@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.artsam.temetnosce.core.presentation.theme.TemetNosceAppTheme
-import com.artsam.temetnosce.feature.sadhana.presentation.screen.SadhanaScreen
+import com.artsam.sadhana.presentation.screen.daily.SadhanaScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -6,7 +6,7 @@ plugins {
 
 android {
     resourcePrefix = "sadhana_"
-    namespace = "com.artsam.temetnosce.feature.sadhana"
+    namespace = "com.artsam.sadhana"
     compileSdk = 34
 
     defaultConfig {
@@ -31,7 +31,10 @@ android {
         jvmTarget = "17"
     }
 
-    buildFeatures { compose = true }
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
 
     composeOptions { kotlinCompilerExtensionVersion = "1.4.7" }
 }
@@ -45,11 +48,14 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
 
+    implementation(libs.androidx.lifecycleCompose)
+
     implementation(libs.kotlin.coroutinesCore)
 
     implementation(libs.koin.android)
 
     implementation(libs.google.gson)
+    implementation(libs.google.accompanist)
 
     // database
     implementation(libs.database.roomRuntime)

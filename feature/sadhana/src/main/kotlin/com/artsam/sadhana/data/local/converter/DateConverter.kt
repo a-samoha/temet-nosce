@@ -1,4 +1,4 @@
-package com.artsam.temetnosce.feature.sadhana.data.local.converter
+package com.artsam.sadhana.data.local.converter
 
 import androidx.room.TypeConverter
 import java.util.*

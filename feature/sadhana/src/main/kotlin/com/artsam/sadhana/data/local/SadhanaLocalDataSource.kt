@@ -1,6 +1,6 @@
-package com.artsam.temetnosce.feature.sadhana.data.local
+package com.artsam.sadhana.data.local
 
-import com.artsam.temetnosce.feature.sadhana.domain.SadhanaDataSource
+import com.artsam.sadhana.domain.SadhanaDataSource
 
 internal class SadhanaLocalDataSource : SadhanaDataSource.Local {
     override fun updateSadhana() {

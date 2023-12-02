@@ -1,4 +1,4 @@
-package com.artsam.temetnosce.feature.sadhana.data.local
+package com.artsam.sadhana.data.local
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

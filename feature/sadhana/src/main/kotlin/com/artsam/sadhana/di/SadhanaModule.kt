@@ -1,9 +1,9 @@
-package com.artsam.temetnosce.feature.sadhana.di
+package com.artsam.sadhana.di
 
 import androidx.room.Room
-import com.artsam.temetnosce.feature.sadhana.data.local.SadhanaDatabase
-import com.artsam.temetnosce.feature.sadhana.data.local.SadhanaLocalDataSource
-import com.artsam.temetnosce.feature.sadhana.domain.SadhanaDataSource
+import com.artsam.sadhana.data.local.SadhanaDatabase
+import com.artsam.sadhana.data.local.SadhanaLocalDataSource
+import com.artsam.sadhana.domain.SadhanaDataSource
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.bind
