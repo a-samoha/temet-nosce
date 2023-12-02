@@ -1,4 +1,4 @@
-package com.artsam.temetnosce.domain.model
+package com.artsam.temetnosce.feature.sadhana.domain.model
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

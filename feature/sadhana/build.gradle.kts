@@ -4,12 +4,15 @@ plugins {
     kotlin("android")
 }
 
-apply(from = "$rootDir/gradle/build_android.gradle")
-
 android {
     resourcePrefix = "sadhana_"
     namespace = "com.artsam.temetnosce.feature.sadhana"
+    compileSdk = 34
+
     defaultConfig {
+        minSdk = 26
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         kapt {
             arguments {
                 arg("room.schemaLocation", "$projectDir/schemas")
@@ -18,11 +21,24 @@ android {
             }
         }
     }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    buildFeatures { compose = true }
+
+    composeOptions { kotlinCompilerExtensionVersion = "1.4.7" }
 }
 
 dependencies {
 
-    implementation(libs.androidx.activity.compose)
+    // compose
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
@@ -30,13 +46,17 @@ dependencies {
     implementation("androidx.compose.material3:material3")
 
     implementation(libs.kotlin.coroutinesCore)
+
     implementation(libs.koin.android)
 
     implementation(libs.google.gson)
+
+    // database
     implementation(libs.database.roomRuntime)
     implementation(libs.database.roomKtx)
     kapt(libs.database.roomCompiler)
 
+    // test
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.coroutinesTest)
     testImplementation(libs.mockk)

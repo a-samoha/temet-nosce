@@ -7,6 +7,10 @@ apply(from = "$rootDir/gradle/build_android.gradle")
 
 android {
     namespace = "com.artsam.temetnosce.core.presentation"
+
+    buildFeatures { compose = true }
+
+    composeOptions { kotlinCompilerExtensionVersion = "1.4.7" }
 }
 
 dependencies {
@@ -33,5 +37,4 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-
 }

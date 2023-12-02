@@ -1,4 +1,4 @@
-package com.artsam.temetnosce.feature.sadhana.screen
+package com.artsam.temetnosce.feature.sadhana.presentation.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,7 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.artsam.temetnosce.domain.model.SadhanaItemModel
+import com.artsam.temetnosce.feature.sadhana.domain.model.SadhanaItemModel
 import com.artsam.temetnosce.feature.sadhana.R
 
 @Composable

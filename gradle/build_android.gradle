@@ -6,9 +6,6 @@ android {
         targetSdk = libs.versions.targetSdk.get() as int
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     compileOptions {
@@ -18,13 +15,5 @@ android {
 
     kotlinOptions {
         jvmTarget = libs.versions.java.get()
-    }
-
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.7"
     }
 }

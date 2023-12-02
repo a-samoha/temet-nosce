@@ -8,7 +8,7 @@ import androidx.room.Query
 interface SadhanaDao {
 
     @Query("SELECT * FROM ${SadhanaContract.TABLE} WHERE ${SadhanaContract.DATE} BETWEEN :start AND :end")
-    suspend fun querySadhanaDaysForPeriod(start: Long, end: Long): List<SadhanaEntity>
+    suspend fun querySadhanaForPeriod(start: Long, end: Long): List<SadhanaEntity>
 
     @Insert
     suspend fun insert(item: SadhanaEntity)

@@ -15,7 +15,7 @@ import com.artsam.temetnosce.feature.sadhana.data.local.converter.DateConverter
 )
 @TypeConverters(DateConverter::class)
 internal abstract class SadhanaDatabase : RoomDatabase() {
-    abstract fun coinDao(): SadhanaDao
+    abstract fun sadhanaDao(): SadhanaDao
 
     companion object {
         const val DB_NAME = "sadhana_v1_db"

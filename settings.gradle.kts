@@ -16,8 +16,9 @@ dependencyResolutionManagement {
 
 rootProject.name = "Temet Nosce"
 
-include(":app")
-
-include(":core:presentation")
-
-include(":feature:sadhana")
+val libraries = listOf(
+    ":app",
+    ":presentation",
+    ":feature:sadhana"
+)
+include(libraries)

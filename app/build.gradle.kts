@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("kotlin-kapt")
     kotlin("android")
 }
 
@@ -9,13 +10,9 @@ android {
     namespace = "com.artsam.temetnosce"
 
     defaultConfig {
-        applicationId = "com.artsam.temetnosce"
+        applicationId = "com.artsam.temetnosce.app"
         versionCode = Integer.parseInt(libs.versions.versionCode.get())
         versionName = libs.versions.versionName.get()
-
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     buildTypes {
@@ -37,6 +34,8 @@ android {
 
 dependencies {
 
-    implementation(project(":core:presentation"))
+    implementation(project(":presentation"))
     implementation(project(":feature:sadhana"))
+
+    implementation(libs.koin.android)
 }
