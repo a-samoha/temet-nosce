@@ -1,4 +1,4 @@
-package com.artsam.temetnosce.core.presentation.theme
+package com.artsam.temetnosce.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

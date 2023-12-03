@@ -1,4 +1,4 @@
-package com.artsam.temetnosce.app.di
+package com.artsam.temetnosce.app
 
 import android.app.Application
 import com.artsam.sadhana.di.sadhanaModule

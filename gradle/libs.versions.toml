@@ -34,6 +34,7 @@ kotlin-coroutinesCore         = { module = "org.jetbrains.kotlinx:kotlinx-corout
 kotlin-stdLib                 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 
 koin-android                  = "io.insert-koin:koin-android:3.4.3"
+koin-compose                  = "io.insert-koin:koin-androidx-compose:3.4.6"
 
 database-roomRuntime          = { module = "androidx.room:room-runtime", version.ref = "roomVersion" }
 database-roomCompiler         = { module = "androidx.room:room-compiler", version.ref = "roomVersion" }

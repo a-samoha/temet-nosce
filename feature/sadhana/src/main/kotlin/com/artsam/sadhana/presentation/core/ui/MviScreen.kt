@@ -1,4 +1,4 @@
-@file:Suppress("MemberVisibilityCanBePrivate")
+//@file:Suppress("MemberVisibilityCanBePrivate")
 
 package com.artsam.sadhana.presentation.core.ui
 
@@ -11,11 +11,11 @@ abstract class MviScreen<S: MviState, E: MviEffect>(
 ) : Screen() {
 
     @Composable
-    override fun Build() {
+    override fun Bind() {
         LaunchedEffect(KEY_EFFECTS_PROCESSOR) {
             viewModel.effectStream.collect(::processEffect)
         }
-        super.Build()
+        super.Bind()
     }
 
     protected open fun processEffect(effect: E) = Unit

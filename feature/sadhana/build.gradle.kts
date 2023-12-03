@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.kotlin.coroutinesCore)
 
     implementation(libs.koin.android)
+    implementation(libs.koin.compose)
 
     implementation(libs.google.gson)
     implementation(libs.google.accompanist)

@@ -1,4 +1,4 @@
-package com.artsam.temetnosce.core.presentation.activity
+package com.artsam.temetnosce.presentation.activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -6,8 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.artsam.temetnosce.core.presentation.theme.TemetNosceAppTheme
-import com.artsam.sadhana.presentation.screen.daily.SadhanaScreen
+import com.artsam.sadhana.presentation.screen.daily.DailyScreen
+import com.artsam.temetnosce.presentation.theme.TemetNosceAppTheme
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,10 +18,10 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 NavHost(
                     navController = rememberNavController(),
-                    startDestination = "sadhana_screen"
+                    startDestination = "sadhana_feature"
                 ) {
-                    composable("sadhana_screen") {
-                        SadhanaScreen()
+                    composable("sadhana_feature") {
+                        DailyScreen(viewModel = koinViewModel()).Bind()
                     }
                 }
             }

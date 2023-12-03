@@ -6,7 +6,7 @@ plugins {
 apply(from = "$rootDir/gradle/build_android.gradle")
 
 android {
-    namespace = "com.artsam.temetnosce.core.presentation"
+    namespace = "com.artsam.temetnosce.presentation"
 
     buildFeatures { compose = true }
 
@@ -25,6 +25,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+
+    implementation(libs.koin.compose)
 
     // Navigation
     implementation(libs.androidx.navigation.compose)

@@ -30,6 +30,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.artsam.sadhana.domain.model.SadhanaItemModel
 import com.artsam.sadhana.R
+import com.artsam.sadhana.presentation.core.ui.EmptyEffect
+import com.artsam.sadhana.presentation.core.ui.MviScreen
+
+class DailyScreen(
+    private val viewModel: DailyViewModel
+) : MviScreen<DailyState, EmptyEffect>(viewModel) {
+
+    @Composable
+    override fun Content() {
+        SadhanaScreen()
+    }
+}
 
 @Composable
 fun SadhanaScreen() {
@@ -41,7 +53,7 @@ fun SadhanaScreen() {
         SadhanaItemModel("books", "Книги, мин", R.drawable.sadhana_ic_bookopen),
         SadhanaItemModel("lectures", "Лекции", R.drawable.sadhana_ic_headphones1),
         SadhanaItemModel("sleep", "Сон", R.drawable.sadhana_ic_moon),
-        SadhanaItemModel(     "japa73", "Джапа", null, R.string.sadhana_time_0730, R.string.sadhana_japa_rounds_placeholder),
+        SadhanaItemModel("japa73", "Джапа", null, R.string.sadhana_time_0730),
         SadhanaItemModel("japa10", "", null, R.string.sadhana_time_1000),
         SadhanaItemModel("japa18", "", null, R.string.sadhana_time_1800),
         SadhanaItemModel("japa24", "", null, R.string.sadhana_time_2400),

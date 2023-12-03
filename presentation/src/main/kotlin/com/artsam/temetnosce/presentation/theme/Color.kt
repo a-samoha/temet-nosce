@@ -1,4 +1,4 @@
-package com.artsam.temetnosce.core.presentation.theme
+package com.artsam.temetnosce.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.artsam.temetnosce.core.presentation.theme
+package com.artsam.temetnosce.presentation.theme
 
 import android.app.Activity
 import android.os.Build

@@ -19,7 +19,7 @@ abstract class Screen {
     protected open fun navigationBarColor(): Color = MaterialTheme.colorScheme.background
 
     @Composable
-    open fun Build() {
+    open fun Bind() {
         ApplySystemUiColors()
         Content()
     }
