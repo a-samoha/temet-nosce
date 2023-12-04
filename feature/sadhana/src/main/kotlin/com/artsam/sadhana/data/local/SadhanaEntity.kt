@@ -3,6 +3,7 @@ package com.artsam.sadhana.data.local
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.artsam.sadhana.domain.model.DailyModel
 import java.util.Date
 
 @Entity(tableName = SadhanaContract.TABLE)
@@ -32,4 +33,39 @@ class SadhanaEntity(
     val japa18: Short,
     @ColumnInfo(name = SadhanaContract.JAPA24)
     val japa24: Short,
-)
+) {
+
+    fun mapToDomain() =
+        DailyModel(
+            id = id,
+            date = date,
+            awake = awake,
+            service = service,
+            kirtan = kirtan,
+            books = books,
+            lectures = lectures,
+            sleep = sleep,
+            japa73 = japa73,
+            japa10 = japa10,
+            japa18 = japa18,
+            japa24 = japa24,
+        )
+
+    companion object {
+        fun mapFromDomain(domain: DailyModel) =
+            SadhanaEntity(
+                id = domain.id,
+                date = domain.date,
+                awake = domain.awake,
+                service = domain.service,
+                kirtan = domain.kirtan,
+                books = domain.books,
+                lectures = domain.lectures,
+                sleep = domain.sleep,
+                japa73 = domain.japa73,
+                japa10 = domain.japa10,
+                japa18 = domain.japa18,
+                japa24 = domain.japa24,
+            )
+    }
+}

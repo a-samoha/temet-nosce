@@ -20,31 +20,30 @@ import kotlinx.coroutines.launch
 
 abstract class MviViewModel<S : MviState, E : MviEffect> : ViewModel() {
 
-    private val mutableState: MutableStateFlow<S> by lazy { MutableStateFlow(emptyState) }
-    private val effectChannel: Channel<E> = Channel()
+    abstract val emptyState: S
+    private val _uiState: MutableStateFlow<S> by lazy { MutableStateFlow(emptyState) }
+    val uiState: StateFlow<S> by lazy { _uiState.asStateFlow() }
+
+    protected val currentState: S
+        get() = uiState.value
+
+    private val _effectChannel: Channel<E> = Channel()
+    val effectStream: Flow<E> = _effectChannel.receiveAsFlow()
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
     }
 
-    protected val currentState: S
-        get() = state.value
-
-    val state: StateFlow<S> by lazy { mutableState.asStateFlow() }
-    val effectStream: Flow<E> = effectChannel.receiveAsFlow()
-
-    abstract val emptyState: S
-
-    open fun setState(state: S) {
+    open fun updateState(state: S) {
         if (BuildConfig.DEBUG) {
             Log.d(this::class.simpleName, "NEW STATE : $state")
         }
-        mutableState.tryEmit(state)
+        _uiState.tryEmit(state)
     }
 
     fun emitEffect(effect: E) {
         viewModelScope.launch(Dispatchers.Main.immediate + exceptionHandler) {
-            effectChannel.send(effect)
+            _effectChannel.send(effect)
         }
     }
 }
