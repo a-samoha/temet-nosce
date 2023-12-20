@@ -19,17 +19,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.artsam.sadhana.domain.model.SadhanaItemModel
 import com.artsam.sadhana.R
+import com.artsam.sadhana.domain.model.DailyModel
 import com.artsam.sadhana.presentation.core.ui.EmptyEffect
 import com.artsam.sadhana.presentation.core.ui.MviScreen
 
@@ -53,7 +56,7 @@ fun ScreenContent(
 ) {
     when (uiState) {
         DailyState.Uninitialized -> Unit
-        is DailyState.Content -> {    // List of typical elements
+        is DailyState.Content -> {
             val elements = listOf(
                 SadhanaItemModel("awake", "Подъём", R.drawable.sadhana_ic_sun),
                 SadhanaItemModel("service", "Служение", R.drawable.sadhana_ic_feet),
@@ -65,7 +68,6 @@ fun ScreenContent(
                 SadhanaItemModel("japa10", "", null, R.string.sadhana_time_1000),
                 SadhanaItemModel("japa18", "", null, R.string.sadhana_time_1800),
                 SadhanaItemModel("japa24", "", null, R.string.sadhana_time_2400),
-                // Add as many elements as needed
             )
             Column(
                 modifier = Modifier
@@ -90,9 +92,9 @@ fun Title(
 ) {
     // Header Text
     Text(
-        text = stringResource(titleRes) + "\n" + uiState.content.date.toString(),
+        text = stringResource(titleRes),
         fontWeight = FontWeight.Bold,
-        color = Color(R.color.sadhana_black),
+        color = colorResource(id = R.color.sadhana_black),
         modifier = Modifier
             .padding(bottom = 16.dp)
             .fillMaxWidth(),
@@ -178,4 +180,15 @@ fun IconOrText(item: SadhanaItemModel) {
             modifier = Modifier.padding(0.dp)
         )
     }
+}
+
+
+@Composable
+@Preview(showBackground = true,)
+private fun PreviewScreenContent() {
+    ScreenContent(
+        uiState = DailyState.Content(
+            content = DailyModel.EMPTY
+        )
+    )
 }

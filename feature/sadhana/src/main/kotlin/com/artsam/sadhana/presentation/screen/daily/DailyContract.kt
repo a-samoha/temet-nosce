@@ -20,6 +20,7 @@ sealed interface DailyState : MviState {
         is Content -> copy(bottomSheet = value)
         else -> this
     }
+
     sealed interface Sheet {
         object None : Sheet
         object SelectLanguage : Sheet

@@ -64,6 +64,7 @@ dependencies {
     kapt(libs.database.roomCompiler)
 
     // test
+    debugImplementation(libs.androidx.ui.tooling)
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.coroutinesTest)
     testImplementation(libs.mockk)
