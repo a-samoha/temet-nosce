@@ -1,5 +1,5 @@
 android {
-    compileSdk = libs.versions.compileSdk.get() as int
+    compileSdkVersion = libs.versions.compileSdk.get() as int
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get() as int
