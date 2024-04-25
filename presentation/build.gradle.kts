@@ -6,7 +6,7 @@ plugins {
 apply(from = "$rootDir/gradle/build_android.gradle")
 
 android {
-    namespace = "com.artsam.temetnosce.presentation"
+    namespace = "com.temetnosce.presentation"
 
     buildFeatures { compose = true }
 

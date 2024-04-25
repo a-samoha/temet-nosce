@@ -7,10 +7,10 @@ plugins {
 apply(from = "$rootDir/gradle/build_android.gradle")
 
 android {
-    namespace = "com.artsam.temetnosce"
+    namespace = "com.temetnosce.app"
 
     defaultConfig {
-        applicationId = "com.artsam.temetnosce.app"
+        applicationId = "com.temetnosce.app"
         versionCode = Integer.parseInt(libs.versions.versionCode.get())
         versionName = libs.versions.versionName.get()
     }
