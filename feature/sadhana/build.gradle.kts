@@ -4,15 +4,13 @@ plugins {
     kotlin("android")
 }
 
+apply(from="$rootDir/gradle/build_android.gradle")
+
 android {
     resourcePrefix = "sadhana_"
     namespace = "com.temetnosce.sadhana"
-    compileSdk = 34
 
     defaultConfig {
-        minSdk = 26
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         kapt {
             arguments {
                 arg("room.schemaLocation", "$projectDir/schemas")
@@ -20,15 +18,6 @@ android {
                 arg("room.expandProjection", "true")
             }
         }
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = "17"
     }
 
     buildFeatures {
