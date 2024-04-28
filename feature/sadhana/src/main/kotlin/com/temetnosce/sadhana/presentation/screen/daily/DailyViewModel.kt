@@ -3,23 +3,23 @@ package com.temetnosce.sadhana.presentation.screen.daily
 import androidx.lifecycle.viewModelScope
 import com.temetnosce.sadhana.domain.model.DailyModel
 import com.temetnosce.sadhana.domain.usecase.DailySadhanaUpdateUseCase
-import com.temetnosce.sadhana.presentation.core.ui.EmptyEffect
+import com.temetnosce.sadhana.presentation.core.ui.EmptyEvent
 import com.temetnosce.sadhana.presentation.core.viewmodel.MviViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class DailyViewModel(
     private val dailySadhanaUpdateUseCase: DailySadhanaUpdateUseCase,
-) : MviViewModel<DailyState, EmptyEffect>() {
+) : MviViewModel<DailyUiState, EmptyEvent>() {
 
-    override val emptyState = DailyState.Uninitialized
+    override val emptyState = DailyUiState.Uninitialized
 
     init {
         viewModelScope.launch {
             delay(1000)
             updateState(
-                DailyState.Content(
-                    bottomSheet = DailyState.Sheet.None,
+                DailyUiState.Content(
+                    bottomSheet = DailyUiState.Sheet.None,
                     content = DailyModel.EMPTY
                 )
             )
@@ -27,7 +27,7 @@ class DailyViewModel(
     }
 
     fun onBooksChanged(value: Short) {
-        val currentState = (currentState as? DailyState.Content)
+        val currentState = (currentState as? DailyUiState.Content)
         currentState?.copy(content = currentState.content.copy(books = value))
             ?.also { viewModelScope.launch { dailySadhanaUpdateUseCase(it.content) } }
             ?.let(::updateState)

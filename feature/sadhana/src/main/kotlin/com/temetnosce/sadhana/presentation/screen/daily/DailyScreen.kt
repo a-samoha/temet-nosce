@@ -33,12 +33,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.temetnosce.sadhana.domain.model.SadhanaItemModel
 import com.temetnosce.sadhana.R
 import com.temetnosce.sadhana.domain.model.DailyModel
-import com.temetnosce.sadhana.presentation.core.ui.EmptyEffect
+import com.temetnosce.sadhana.presentation.core.ui.EmptyEvent
 import com.temetnosce.sadhana.presentation.core.ui.MviScreen
 
 class DailyScreen(
     private val viewModel: DailyViewModel
-) : MviScreen<DailyState, EmptyEffect>(viewModel) {
+) : MviScreen<DailyUiState, EmptyEvent>(viewModel) {
 
     @Composable
     override fun Content() {
@@ -51,12 +51,12 @@ class DailyScreen(
 
 @Composable
 fun ScreenContent(
-    uiState: DailyState,
+    uiState: DailyUiState,
     onBooksChange: (Short) -> Unit = {}
 ) {
     when (uiState) {
-        DailyState.Uninitialized -> Unit
-        is DailyState.Content -> {
+        DailyUiState.Uninitialized -> Unit
+        is DailyUiState.Content -> {
             val elements = listOf(
                 SadhanaItemModel("awake", "Подъём", R.drawable.sadhana_ic_sun),
                 SadhanaItemModel("service", "Служение", R.drawable.sadhana_ic_feet),
@@ -88,7 +88,7 @@ fun ScreenContent(
 @Composable
 fun Title(
     titleRes: Int,
-    uiState: DailyState.Content
+    uiState: DailyUiState.Content
 ) {
     // Header Text
     Text(
@@ -107,7 +107,7 @@ fun Title(
 @Composable
 fun Item(
     item: SadhanaItemModel,
-    uiState: DailyState.Content,
+    uiState: DailyUiState.Content,
     onBooksChange: (Short) -> Unit = {}
 ) {
     // For each item in the list, create a horizontal composition
@@ -187,7 +187,7 @@ fun IconOrText(item: SadhanaItemModel) {
 @Preview(showBackground = true,)
 private fun PreviewScreenContent() {
     ScreenContent(
-        uiState = DailyState.Content(
+        uiState = DailyUiState.Content(
             content = DailyModel.EMPTY
         )
     )

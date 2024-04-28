@@ -1,22 +1,22 @@
 package com.temetnosce.sadhana.presentation.screen.daily
 
 import com.temetnosce.sadhana.domain.model.DailyModel
-import com.temetnosce.sadhana.presentation.core.ui.MviState
+import com.temetnosce.sadhana.presentation.core.ui.UiState
 
-sealed interface DailyState : MviState {
+sealed interface DailyUiState : UiState {
 
     val bottomSheet: Sheet
 
-    object Uninitialized : DailyState {
+    object Uninitialized : DailyUiState {
         override val bottomSheet = Sheet.None
     }
 
     data class Content(
         override val bottomSheet: Sheet = Sheet.None,
         val content: DailyModel
-    ) : DailyState
+    ) : DailyUiState
 
-    fun withSheet(value: Sheet): DailyState = when (this) {
+    fun withSheet(value: Sheet): DailyUiState = when (this) {
         is Content -> copy(bottomSheet = value)
         else -> this
     }

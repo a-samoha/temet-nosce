@@ -2,8 +2,8 @@
 
 package com.temetnosce.sadhana.presentation.core.ui
 
-interface MviState
-interface MviEffect
+interface UiState
+interface UiEvent
 
-object EmptyState : MviState
-object EmptyEffect : MviEffect
+object EmptyState : UiState
+object EmptyEvent : UiEvent

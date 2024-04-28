@@ -6,8 +6,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.temetnosce.sadhana.BuildConfig
-import com.temetnosce.sadhana.presentation.core.ui.MviEffect
-import com.temetnosce.sadhana.presentation.core.ui.MviState
+import com.temetnosce.sadhana.presentation.core.ui.UiEvent
+import com.temetnosce.sadhana.presentation.core.ui.UiState
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-abstract class MviViewModel<S : MviState, E : MviEffect> : ViewModel() {
+abstract class MviViewModel<S : UiState, E : UiEvent> : ViewModel() {
 
     abstract val emptyState: S
     private val _uiState: MutableStateFlow<S> by lazy { MutableStateFlow(emptyState) }

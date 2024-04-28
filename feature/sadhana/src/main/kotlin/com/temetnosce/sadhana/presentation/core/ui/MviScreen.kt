@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.temetnosce.sadhana.presentation.core.viewmodel.MviViewModel
 
-abstract class MviScreen<S: MviState, E: MviEffect>(
+abstract class MviScreen<S: UiState, E: UiEvent>(
     private val viewModel: MviViewModel<S, E>,
 ) : Screen() {
 
