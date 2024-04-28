@@ -9,6 +9,6 @@ internal class SadhanaRepositoryImpl(
     private val sadhanaRemoteDataSource: SadhanaDataSource.Remote,
 ) : SadhanaRepository {
 
-    override suspend fun saveToDb(value: DailyModel): Result<Unit> =
+    override suspend fun insert(value: DailyModel): Result<Unit> =
         sadhanaLocalDataSource.updateSadhana(value)
 }

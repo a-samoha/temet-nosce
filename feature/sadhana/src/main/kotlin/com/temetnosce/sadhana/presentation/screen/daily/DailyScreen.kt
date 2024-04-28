@@ -55,7 +55,7 @@ fun ScreenContent(
     onBooksChange: (Short) -> Unit = {}
 ) {
     when (uiState) {
-        DailyUiState.Uninitialized -> Unit
+        is DailyUiState.Uninitialized -> Unit
         is DailyUiState.Content -> {
             val elements = listOf(
                 SadhanaItemModel("awake", "Подъём", R.drawable.sadhana_ic_sun),
@@ -74,7 +74,7 @@ fun ScreenContent(
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-                Title(R.string.sadhana_my_sadhana_today, uiState)
+                Title(R.string.sadhana_my_sadhana_today)
                 LazyColumn {
                     items(elements) { item ->
                         Item(item, uiState, onBooksChange)
@@ -86,11 +86,7 @@ fun ScreenContent(
 }
 
 @Composable
-fun Title(
-    titleRes: Int,
-    uiState: DailyUiState.Content
-) {
-    // Header Text
+fun Title(titleRes: Int) {
     Text(
         text = stringResource(titleRes),
         fontWeight = FontWeight.Bold,
@@ -121,8 +117,9 @@ fun Item(
         IconOrText(item)
 
         // var text by remember { mutableStateOf("") }
+
+        // "EditText" with border and rounded corners
         OutlinedTextField(
-            // "EditText" with border and rounded corners
             value = uiState.content.books.toString(), // Here can be the state of your text
             onValueChange = {
                 if (it.isDigitsOnly()) {
@@ -184,7 +181,7 @@ fun IconOrText(item: SadhanaItemModel) {
 
 
 @Composable
-@Preview(showBackground = true,)
+@Preview(showBackground = true)
 private fun PreviewScreenContent() {
     ScreenContent(
         uiState = DailyUiState.Content(

@@ -38,7 +38,7 @@ abstract class MviViewModel<S : UiState, E : UiEvent> : ViewModel() {
         if (BuildConfig.DEBUG) {
             Log.d(this::class.simpleName, "NEW STATE : $state")
         }
-        _uiState.tryEmit(state)
+        _uiState.value = state
     }
 
     fun emitEffect(effect: E) {

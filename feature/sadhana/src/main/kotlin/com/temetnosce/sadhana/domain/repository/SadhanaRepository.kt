@@ -4,5 +4,7 @@ import com.temetnosce.sadhana.domain.model.DailyModel
 
 interface SadhanaRepository {
 
-    suspend fun saveToDb(value: DailyModel): Result<Unit>
+    suspend fun insert(value: DailyModel): Result<Unit>
+
+    suspend fun queryByDate(): Result<DailyModel> = Result.success(DailyModel.EMPTY)
 }

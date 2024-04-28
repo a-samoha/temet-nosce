@@ -7,8 +7,10 @@ import com.temetnosce.sadhana.data.local.SadhanaLocalDataSource
 import com.temetnosce.sadhana.data.remote.SadhanaRemoteDataSource
 import com.temetnosce.sadhana.domain.SadhanaDataSource
 import com.temetnosce.sadhana.domain.repository.SadhanaRepository
-import com.temetnosce.sadhana.domain.usecase.DailySadhanaUpdateUseCase
-import com.temetnosce.sadhana.domain.usecase.DailySadhanaUpdateUseCaseImpl
+import com.temetnosce.sadhana.domain.usecase.GetDailySadhanaUseCase
+import com.temetnosce.sadhana.domain.usecase.GetDailySadhanaUseCaseImpl
+import com.temetnosce.sadhana.domain.usecase.InsertDailySadhanaUseCase
+import com.temetnosce.sadhana.domain.usecase.InsertDailySadhanaUseCaseImpl
 import com.temetnosce.sadhana.presentation.screen.daily.DailyViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModelOf
@@ -20,7 +22,8 @@ val sadhanaModule = module {
 
     viewModelOf(::DailyViewModel)
 
-    factoryOf(::DailySadhanaUpdateUseCaseImpl) bind DailySadhanaUpdateUseCase::class
+    factoryOf(::GetDailySadhanaUseCaseImpl) bind GetDailySadhanaUseCase::class
+    factoryOf(::InsertDailySadhanaUseCaseImpl) bind InsertDailySadhanaUseCase::class
 
     factoryOf(::SadhanaRepositoryImpl) bind SadhanaRepository::class
 
