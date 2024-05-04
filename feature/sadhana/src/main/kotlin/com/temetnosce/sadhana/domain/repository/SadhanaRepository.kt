@@ -6,5 +6,5 @@ interface SadhanaRepository {
 
     suspend fun insert(value: DailyModel): Result<Unit>
 
-    suspend fun queryByDate(): Result<DailyModel> = Result.success(DailyModel.EMPTY)
+    suspend fun queryByDate(): Result<DailyModel>
 }

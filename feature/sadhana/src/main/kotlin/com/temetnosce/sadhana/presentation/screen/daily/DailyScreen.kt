@@ -1,7 +1,9 @@
 package com.temetnosce.sadhana.presentation.screen.daily
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -9,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
@@ -30,9 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.temetnosce.sadhana.domain.model.SadhanaItemModel
 import com.temetnosce.sadhana.R
 import com.temetnosce.sadhana.domain.model.DailyModel
+import com.temetnosce.sadhana.domain.model.SadhanaItemModel
 import com.temetnosce.sadhana.presentation.core.ui.EmptyEvent
 import com.temetnosce.sadhana.presentation.core.ui.MviScreen
 
@@ -55,7 +58,7 @@ fun ScreenContent(
     onBooksChange: (Short) -> Unit = {}
 ) {
     when (uiState) {
-        is DailyUiState.Uninitialized -> Unit
+        is DailyUiState.Uninitialized -> ShowLoading()
         is DailyUiState.Content -> {
             val elements = listOf(
                 SadhanaItemModel("awake", "Подъём", R.drawable.sadhana_ic_sun),
@@ -82,6 +85,20 @@ fun ScreenContent(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun ShowLoading() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.size(80.dp),
+            strokeWidth = 8.dp,
+            color = colorResource(id = R.color.sadhana_primary_color),
+        )
     }
 }
 
