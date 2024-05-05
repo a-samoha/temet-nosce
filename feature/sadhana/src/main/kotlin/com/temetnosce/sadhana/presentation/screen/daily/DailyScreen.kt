@@ -138,6 +138,7 @@ fun ScreenContent(
                         SadhanaItem(item, onValueChange = onBooksChange)
                     }
                 }
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
             }
         }
     }
@@ -164,7 +165,7 @@ fun Title(titleRes: Int) {
         fontWeight = FontWeight.Bold,
         color = colorResource(id = R.color.sadhana_black),
         modifier = Modifier
-            .padding(bottom = 16.dp)
+            .padding(top = 16.dp, bottom = 24.dp)
             .fillMaxWidth(),
         style = MaterialTheme.typography.headlineLarge.copy(fontSize = 30.sp),
         textAlign = TextAlign.Center
@@ -188,7 +189,6 @@ fun SadhanaItem(
         ) {
             Label(item.label, Modifier.weight(1f))
             IconOrText(item)
-
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
