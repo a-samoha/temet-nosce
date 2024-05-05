@@ -2,6 +2,7 @@ package com.temetnosce.sadhana.presentation.screen.daily
 
 import androidx.lifecycle.viewModelScope
 import com.temetnosce.sadhana.domain.model.DailyModel
+import com.temetnosce.sadhana.domain.model.SadhanaItemId
 import com.temetnosce.sadhana.domain.usecase.InsertDailySadhanaUseCase
 import com.temetnosce.sadhana.domain.usecase.GetDailySadhanaUseCase
 import com.temetnosce.sadhana.presentation.core.ui.EmptyEvent
@@ -31,11 +32,11 @@ class DailyViewModel(
         }
     }
 
-    fun onBooksChanged(value: Short) {
+    fun onBooksChanged(value: Pair<SadhanaItemId, Any>) {
         val currentState = (currentState as? DailyUiState.Content)
-        currentState?.copy(content = currentState.content.copy(books = value))
-            ?.also { viewModelScope.launch { saveDailySadhanaUseCase(it.content) } }
-            ?.let(::updateState)
+//        currentState?.copy(content = currentState.content.copy(books = value))
+//            ?.also { viewModelScope.launch { saveDailySadhanaUseCase(it.content) } }
+//            ?.let(::updateState)
     }
 }
 
