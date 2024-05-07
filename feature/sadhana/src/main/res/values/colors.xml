@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="sadhana_black">#000000</color>
     <color name="sadhana_primary_color">#FD8701</color>
+
+    <color name="sadhana_japa_07">#FBCB00</color>
+    <color name="sadhana_japa_10">#FB9C00</color>
+    <color name="sadhana_japa_18">#D5258B</color>
+    <color name="sadhana_japa_24">#2E77CE</color>
+
+    <color name="sadhana_black">#000000</color>
+    <color name="sadhana_white">#ffffff</color>
 </resources>
