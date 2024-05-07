@@ -10,16 +10,12 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -31,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.InspectableModifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -77,75 +72,9 @@ fun ScreenContent(
     when (uiState) {
         is DailyUiState.Uninitialized -> ShowLoading()
         is DailyUiState.Content -> {
-            val elements = listOf(
-                SadhanaItemModel(
-                    SadhanaItemId.MORNING_RISE,
-                    "Подъём",
-                    R.drawable.sadhana_ic_sun,
-                    value = 0
-                ),
-                SadhanaItemModel(
-                    SadhanaItemId.KRSHNA_SERVICE,
-                    "Служение",
-                    R.drawable.sadhana_ic_feet,
-                    value = 0
-                ),
-                SadhanaItemModel(
-                    SadhanaItemId.KIRTAN,
-                    "Киртан",
-                    R.drawable.sadhana_ic_musicalnote,
-                    value = 0
-                ),
-                SadhanaItemModel(
-                    SadhanaItemId.BOOKS_MIN,
-                    "Книги, мин",
-                    R.drawable.sadhana_ic_bookopen,
-                    value = 0
-                ),
-                SadhanaItemModel(
-                    SadhanaItemId.LECTURES,
-                    "Лекции",
-                    R.drawable.sadhana_ic_headphones1,
-                    value = 0
-                ),
-                SadhanaItemModel(
-                    SadhanaItemId.LIGHTS_OUT,
-                    "Сон",
-                    R.drawable.sadhana_ic_moon,
-                    value = 0
-                ),
-                SadhanaItemModel(
-                    SadhanaItemId.JAPA_07,
-                    "Джапа",
-                    null,
-                    R.string.sadhana_time_0730,
-                    value = 0
-                ),
-                SadhanaItemModel(
-                    SadhanaItemId.JAPA_10,
-                    "",
-                    null,
-                    R.string.sadhana_time_1000,
-                    value = 0
-                ),
-                SadhanaItemModel(
-                    SadhanaItemId.JAPA_18,
-                    "",
-                    null,
-                    R.string.sadhana_time_1800,
-                    value = 0
-                ),
-                SadhanaItemModel(
-                    SadhanaItemId.JAPA_24,
-                    "",
-                    null,
-                    R.string.sadhana_time_2400,
-                    value = 0
-                ),
-            )
+            val elements = uiState.content
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Title(R.string.sadhana_my_sadhana_today)
                 Column {
@@ -208,7 +137,7 @@ fun SadhanaItem(
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Label(item.label, Modifier.weight(2f))
+            Label(item.label?.let { stringResource(id = it) } ?: "", Modifier.weight(2f))
             IconOrText(item, Modifier.width(64.dp))
             VerticalDivider()
             ValueContainer(
@@ -335,7 +264,7 @@ fun ValueContainer(
 private fun PreviewScreenContent() {
     ScreenContent(
         uiState = DailyUiState.Content(
-            content = DailyModel.EMPTY
+            content = DailyModel.EMPTY.toSadhanaItemsList()
         )
     )
 }

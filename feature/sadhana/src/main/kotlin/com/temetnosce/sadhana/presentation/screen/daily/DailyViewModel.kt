@@ -1,10 +1,10 @@
 package com.temetnosce.sadhana.presentation.screen.daily
 
 import androidx.lifecycle.viewModelScope
-import com.temetnosce.sadhana.domain.model.DailyModel
 import com.temetnosce.sadhana.domain.model.SadhanaItemId
-import com.temetnosce.sadhana.domain.usecase.InsertDailySadhanaUseCase
+import com.temetnosce.sadhana.domain.model.SadhanaItemModel
 import com.temetnosce.sadhana.domain.usecase.GetDailySadhanaUseCase
+import com.temetnosce.sadhana.domain.usecase.InsertDailySadhanaUseCase
 import com.temetnosce.sadhana.presentation.core.ui.EmptyEvent
 import com.temetnosce.sadhana.presentation.core.ui.UiState
 import com.temetnosce.sadhana.presentation.core.viewmodel.MviViewModel
@@ -25,7 +25,7 @@ class DailyViewModel(
                     updateState(
                         DailyUiState.Content(
                             bottomSheet = DailyUiState.Sheet.None,
-                            content = it
+                            content = it.toSadhanaItemsList()
                         )
                     )
                 }
@@ -50,7 +50,7 @@ sealed interface DailyUiState : UiState {
 
     data class Content(
         override val bottomSheet: Sheet = Sheet.None,
-        val content: DailyModel
+        val content: List<SadhanaItemModel>
     ) : DailyUiState
 
     fun withSheet(value: Sheet): DailyUiState = when (this) {

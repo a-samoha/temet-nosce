@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sadhana_my_sadhana_today">Моя Садгана сьогодні</string>
+    <string name="sadhana_morning_rise">Підйом</string>
+    <string name="sadhana_service">Служіння</string>
+    <string name="sadhana_kirtan">Кіртан</string>
+    <string name="sadhana_books_min">Книги, хв</string>
+    <string name="sadhana_lectures">Лекції</string>
+    <string name="sadhana_lights_out">Сон</string>
+    <string name="sadhana_japa">Джапа</string>
+    <string name="sadhana_time_0730">7:30</string>
+    <string name="sadhana_time_1000">10:00</string>
+    <string name="sadhana_time_1800">18:00</string>
+    <string name="sadhana_time_2400">00:00</string>
+</resources>

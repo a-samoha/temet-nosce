@@ -7,7 +7,7 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class SadhanaItemModel(
     val id: SadhanaItemId,
-    val label: String,
+    @StringRes val label: Int? = null,
     @DrawableRes val iconResId: Int? = null,
     @StringRes val timeLabelResId: Int? = null,
     val value: Any,
