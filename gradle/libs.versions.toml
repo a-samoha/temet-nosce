@@ -1,7 +1,7 @@
 # suppress inspection "UnusedProperty" for whole file
 # suppress inspection "WrongPropertyKeyValueDelimiter" for whole file
 [versions]
-app                           = "8.4.0"
+app                           = "8.4.1"
 java                          = "17"
 kotlin                        = "1.9.23"
 
