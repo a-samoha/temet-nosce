@@ -1,6 +1,7 @@
 package com.temetnosce.sadhana.presentation.screen.daily
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,15 +14,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,10 +31,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.temetnosce.sadhana.R
 import com.temetnosce.sadhana.domain.model.DailyModel
@@ -41,6 +44,8 @@ import com.temetnosce.sadhana.domain.model.SadhanaItemId
 import com.temetnosce.sadhana.domain.model.SadhanaItemModel
 import com.temetnosce.sadhana.presentation.core.ui.EmptyEvent
 import com.temetnosce.sadhana.presentation.core.ui.MviScreen
+import com.temetnosce.sadhana.presentation.screen.daily.DailyScreen.Companion.JAPA_ITEMS
+import com.temetnosce.sadhana.presentation.screen.daily.DailyScreen.Companion.SADHANA_ITEMS
 import com.temetnosce.sadhana.presentation.screen.daily.DailyScreen.Companion.SADHANA_ITEM_HEIGHT
 import com.temetnosce.sadhana.presentation.theme.SadhanaTheme
 import com.temetnosce.sadhana.presentation.theme.SadhanaTypography
@@ -61,6 +66,8 @@ class DailyScreen(
 
     companion object {
         val SADHANA_ITEM_HEIGHT = 48.dp
+        val SADHANA_ITEMS = 6
+        val JAPA_ITEMS = 4
     }
 }
 
@@ -78,15 +85,15 @@ fun ScreenContent(
             ) {
                 Title(R.string.sadhana_my_sadhana_today)
                 Column {
-                    repeat(6) { item ->
+                    repeat(SADHANA_ITEMS) { item ->
                         SadhanaItem(elements[item], onValueChange = onBooksChange)
                     }
                 }
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                 Spacer(modifier = Modifier.height(16.dp))
                 Column {
-                    repeat(4) { item ->
-                        SadhanaItem(elements[item + 6], onValueChange = onBooksChange)
+                    repeat(JAPA_ITEMS) { item ->
+                        SadhanaItem(elements[SADHANA_ITEMS + item], onValueChange = onBooksChange)
                     }
                 }
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -163,7 +170,10 @@ fun Label(label: String, modifier: Modifier) {
  * Box with icon/time_text based on the resource type
  */
 @Composable
-fun IconOrText(item: SadhanaItemModel, modifier: Modifier) {
+fun IconOrText(
+    item: SadhanaItemModel,
+    modifier: Modifier,
+) {
     when {
         item.iconResId != null -> {
             Box(
@@ -213,51 +223,104 @@ fun IconOrText(item: SadhanaItemModel, modifier: Modifier) {
 fun ValueContainer(
     item: SadhanaItemModel,
     onValueChange: (Pair<SadhanaItemId, Any>) -> Unit,
-    modifier: Modifier
+    modifier: Modifier,
+) = Box(
+    contentAlignment = Alignment.Center,
+    modifier = modifier,
 ) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier,
-    ) {
-        when (item.id) {
-            SadhanaItemId.MORNING_RISE -> TextField(
-                value = item.value.toString(), onValueChange = {},
-            )
-            SadhanaItemId.KRSHNA_SERVICE -> Checkbox(
-                checked = false, onCheckedChange = {},
-            )
-            SadhanaItemId.KIRTAN -> Checkbox(
-                checked = false, onCheckedChange = {},
-            )
-            SadhanaItemId.BOOKS_MIN -> TextField(
-                value = item.value.toString(),
-                onValueChange = { onValueChange(item.id to it) }, //if (it.isDigitsOnly()) { onValueChange(it.toShort()) }
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                singleLine = true,
-                modifier = Modifier.background(color = Color.White),
-                textStyle = LocalTextStyle.current.copy(color = Color.Black), // Set the text color
-            )
-            SadhanaItemId.LECTURES -> Checkbox(
-                checked = false, onCheckedChange = {},
-            )
-            SadhanaItemId.LIGHTS_OUT -> TextField(
-                value = item.value.toString(), onValueChange = {},
-            )
-            SadhanaItemId.JAPA_07 -> TextField(
-                value = item.value.toString(), onValueChange = {},
-            )
-            SadhanaItemId.JAPA_10 -> TextField(
-                value = item.value.toString(), onValueChange = {},
-            )
-            SadhanaItemId.JAPA_18 -> TextField(
-                value = item.value.toString(), onValueChange = {},
-            )
-            SadhanaItemId.JAPA_24 -> TextField(
-                value = item.value.toString(), onValueChange = {},
-            )
-        }
+    when (item.id) {
+        SadhanaItemId.MORNING_RISE -> SadhanaTextField(
+            value = item.value.toString(),
+            onValueChange = {},
+            placeholderText = "04:00",
+        )
+        SadhanaItemId.KRSHNA_SERVICE -> SadhanaCheckbox(
+            checked = false, onCheckedChange = {},
+        )
+        SadhanaItemId.KIRTAN -> SadhanaCheckbox(
+            checked = true, onCheckedChange = {},
+        )
+        SadhanaItemId.BOOKS_MIN -> SadhanaTextField(
+            value = if (item.value is Short && item.value > 0) item.value.toString() else "",
+            onValueChange = { onValueChange(item.id to it) }, //if (it.isDigitsOnly()) { onValueChange(it.toShort()) }
+//            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            placeholderText = "30",
+        )
+        SadhanaItemId.LECTURES -> SadhanaCheckbox(
+            checked = false, onCheckedChange = {},
+        )
+        SadhanaItemId.LIGHTS_OUT -> SadhanaTextField(
+            value = if (item.value is Short && item.value > 0) item.value.toString() else "",
+            onValueChange = {},
+            placeholderText = "21:30",
+        )
+        SadhanaItemId.JAPA_07 -> SadhanaTextField(
+            value = if (item.value is Short && item.value > 0) item.value.toString() else "",
+            onValueChange = {},
+//            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            placeholderText = "16",
+        )
+        SadhanaItemId.JAPA_10 -> SadhanaTextField(
+            value = if (item.value is Short && item.value > 0) item.value.toString() else "",
+            onValueChange = {},
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        )
+        SadhanaItemId.JAPA_18 -> SadhanaTextField(
+            value = if (item.value is Short && item.value > 0) item.value.toString() else "",
+            onValueChange = {},
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        )
+        SadhanaItemId.JAPA_24 -> SadhanaTextField(
+            value = if (item.value is Short && item.value > 0) item.value.toString() else "",
+            onValueChange = {},
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        )
     }
 }
+
+@Composable
+private fun SadhanaCheckbox(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) = Checkbox(
+    checked,
+    onCheckedChange,
+    modifier = Modifier
+        .fillMaxSize()
+        .background(colorResource(id = R.color.sadhana_checkbox_bg))
+)
+
+@Composable
+private fun SadhanaTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    placeholderText: String = "",
+) = BasicTextField(
+    value = value,
+    onValueChange = onValueChange,
+    textStyle = TextStyle(
+        color = if (isSystemInDarkTheme()) Color(0xFF969EBD) else Color.Black, //colorResource(id = R.color.sadhana_primary_text_colo)
+        textAlign = TextAlign.Center,
+    ),
+    keyboardOptions = keyboardOptions,
+    singleLine = true,
+    decorationBox = { innerTextField ->
+        Box {
+            if (value.isBlank()) {
+                Text(
+                    text = placeholderText,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .wrapContentSize(),
+                    color = if (isSystemInDarkTheme()) Color(0xFF969EBD) else Color.LightGray,
+                    fontSize = 14.sp
+                )
+            }
+        }
+        innerTextField()
+    }
+)
 
 @Composable
 @Preview(showSystemUi = true)

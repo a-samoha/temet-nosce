@@ -35,9 +35,7 @@ abstract class MviViewModel<S : UiState, E : UiEvent> : ViewModel() {
     }
 
     open fun updateState(state: S) {
-        if (BuildConfig.DEBUG) {
-            Log.d(this::class.simpleName, "NEW STATE : $state")
-        }
+        if (BuildConfig.DEBUG) Log.d(this::class.simpleName, "NEW STATE : $state")
         _uiState.value = state
     }
 

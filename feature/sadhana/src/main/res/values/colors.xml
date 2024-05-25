@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="sadhana_primary_color">#FD8701</color>
+    <color name="sadhana_primary_text_colo">#14273A</color>
+    <color name="sadhana_error_color">#FFA587</color>
+    <color name="sadhana_checkbox_bg">#F3F4F5</color>
 
     <color name="sadhana_japa_07">#FBCB00</color>
     <color name="sadhana_japa_10">#FB9C00</color>
