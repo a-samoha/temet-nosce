@@ -74,7 +74,7 @@ class DailyScreen(
 @Composable
 fun ScreenContent(
     uiState: DailyUiState,
-    onBooksChange: (Pair<SadhanaItemId, Any>) -> Unit = {}
+    onValueChange: (Pair<SadhanaItemId, Any>) -> Unit = {}
 ) {
     when (uiState) {
         is DailyUiState.Uninitialized -> ShowLoading()
@@ -86,14 +86,14 @@ fun ScreenContent(
                 Title(R.string.sadhana_my_sadhana_today)
                 Column {
                     repeat(SADHANA_ITEMS) { item ->
-                        SadhanaItem(elements[item], onValueChange = onBooksChange)
+                        SadhanaItem(elements[item], onValueChange = onValueChange)
                     }
                 }
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                 Spacer(modifier = Modifier.height(16.dp))
                 Column {
                     repeat(JAPA_ITEMS) { item ->
-                        SadhanaItem(elements[SADHANA_ITEMS + item], onValueChange = onBooksChange)
+                        SadhanaItem(elements[SADHANA_ITEMS + item], onValueChange = onValueChange)
                     }
                 }
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -231,48 +231,40 @@ fun ValueContainer(
     when (item.id) {
         SadhanaItemId.MORNING_RISE -> SadhanaTextField(
             value = item.value.toString(),
-            onValueChange = {},
+            onValueChange = { onValueChange(item.id to it) },
             placeholderText = "04:00",
         )
         SadhanaItemId.KRSHNA_SERVICE -> SadhanaCheckbox(
-            checked = false, onCheckedChange = {},
+            checked = item.value == true, onCheckedChange = { onValueChange(item.id to it) },
         )
         SadhanaItemId.KIRTAN -> SadhanaCheckbox(
-            checked = true, onCheckedChange = {},
+            checked = item.value == true, onCheckedChange = { onValueChange(item.id to it) },
         )
         SadhanaItemId.BOOKS_MIN -> SadhanaTextField(
-            value = if (item.value is Short && item.value > 0) item.value.toString() else "",
-            onValueChange = { onValueChange(item.id to it) }, //if (it.isDigitsOnly()) { onValueChange(it.toShort()) }
-//            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            value = item.value.toString(),
+            onValueChange = { onValueChange(item.id to it) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             placeholderText = "30",
         )
         SadhanaItemId.LECTURES -> SadhanaCheckbox(
-            checked = false, onCheckedChange = {},
+            checked = item.value == true, onCheckedChange = { onValueChange(item.id to it) },
         )
         SadhanaItemId.LIGHTS_OUT -> SadhanaTextField(
-            value = if (item.value is Short && item.value > 0) item.value.toString() else "",
-            onValueChange = {},
+            value = item.value.toString(),
+            onValueChange = { onValueChange(item.id to it) },
             placeholderText = "21:30",
         )
         SadhanaItemId.JAPA_07 -> SadhanaTextField(
-            value = if (item.value is Short && item.value > 0) item.value.toString() else "",
-            onValueChange = {},
-//            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            value = item.value.toString(),
+            onValueChange = { onValueChange(item.id to it) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             placeholderText = "16",
         )
-        SadhanaItemId.JAPA_10 -> SadhanaTextField(
-            value = if (item.value is Short && item.value > 0) item.value.toString() else "",
-            onValueChange = {},
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        )
-        SadhanaItemId.JAPA_18 -> SadhanaTextField(
-            value = if (item.value is Short && item.value > 0) item.value.toString() else "",
-            onValueChange = {},
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        )
+        SadhanaItemId.JAPA_10,
+        SadhanaItemId.JAPA_18,
         SadhanaItemId.JAPA_24 -> SadhanaTextField(
-            value = if (item.value is Short && item.value > 0) item.value.toString() else "",
-            onValueChange = {},
+            value = item.value.toString(),
+            onValueChange = { onValueChange(item.id to it) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         )
     }

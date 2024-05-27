@@ -22,7 +22,7 @@ class DailyViewModel(
             getDailySadhanaUseCase()
                 .onFailure { }
                 .onSuccess {
-                    updateState(
+                    emitState(
                         DailyUiState.Content(
                             bottomSheet = DailyUiState.Sheet.None,
                             content = it.toSadhanaItemsList()
@@ -34,9 +34,10 @@ class DailyViewModel(
 
     fun onBooksChanged(value: Pair<SadhanaItemId, Any>) {
         val currentState = (currentState as? DailyUiState.Content)
-//        currentState?.copy(content = currentState.content.copy(books = value))
-//            ?.also { viewModelScope.launch { saveDailySadhanaUseCase(it.content) } }
-//            ?.let(::updateState)
+        currentState?.copy(content = currentState.content.map {
+            if (it.id == value.first) it.copy(value = value.second)
+            else it
+        })?.let(::emitState)
     }
 }
 
@@ -44,7 +45,7 @@ sealed interface DailyUiState : UiState {
 
     val bottomSheet: Sheet
 
-    object Uninitialized : DailyUiState {
+    data object Uninitialized : DailyUiState {
         override val bottomSheet = Sheet.None
     }
 
@@ -59,7 +60,7 @@ sealed interface DailyUiState : UiState {
     }
 
     sealed interface Sheet {
-        object None : Sheet
-        object SelectLanguage : Sheet
+        data object None : Sheet
+        data object SelectLanguage : Sheet
     }
 }

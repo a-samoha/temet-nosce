@@ -94,7 +94,7 @@ data class DailyModel(
             service = false,
             lectures = false,
             kirtan = false,
-            books = 0,
+            books = 7,
             sleep = "",
             japa7 = 0,
             japa10 = 0,
