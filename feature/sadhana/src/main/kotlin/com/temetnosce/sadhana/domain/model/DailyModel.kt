@@ -42,7 +42,7 @@ data class DailyModel(
             SadhanaItemId.BOOKS_MIN,
             R.string.sadhana_books_min,
             R.drawable.sadhana_ic_bookopen,
-            value = books
+            value = if (books == 0.toShort()) "" else books
         ),
         SadhanaItemModel(
             SadhanaItemId.LECTURES,
@@ -61,28 +61,28 @@ data class DailyModel(
             R.string.sadhana_japa,
             null,
             R.string.sadhana_time_0730,
-            value = japa7
+            value = if (japa7 == 0.toShort()) "" else japa7
         ),
         SadhanaItemModel(
             SadhanaItemId.JAPA_10,
             null,
             null,
             R.string.sadhana_time_1000,
-            value = japa10
+            value = if (japa10 == 0.toShort()) "" else japa10
         ),
         SadhanaItemModel(
             SadhanaItemId.JAPA_18,
             null,
             null,
             R.string.sadhana_time_1800,
-            value = japa18
+            value = if (japa18 == 0.toShort()) "" else japa18
         ),
         SadhanaItemModel(
             SadhanaItemId.JAPA_24,
             null,
             null,
             R.string.sadhana_time_2400,
-            value = japa24
+            value = if (japa24 == 0.toShort()) "" else japa24
         ),
     )
 
@@ -94,7 +94,7 @@ data class DailyModel(
             service = false,
             lectures = false,
             kirtan = false,
-            books = 7,
+            books = 0,
             sleep = "",
             japa7 = 0,
             japa10 = 0,

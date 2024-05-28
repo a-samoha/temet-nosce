@@ -1,6 +1,7 @@
 package com.temetnosce.sadhana.presentation.screen.daily
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,7 +24,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TimePicker
 import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -229,43 +232,40 @@ fun ValueContainer(
     modifier = modifier,
 ) {
     when (item.id) {
-        SadhanaItemId.MORNING_RISE -> SadhanaTextField(
-            value = item.value.toString(),
-            onValueChange = { onValueChange(item.id to it) },
-            placeholderText = "04:00",
-        )
-        SadhanaItemId.KRSHNA_SERVICE -> SadhanaCheckbox(
-            checked = item.value == true, onCheckedChange = { onValueChange(item.id to it) },
-        )
-        SadhanaItemId.KIRTAN -> SadhanaCheckbox(
-            checked = item.value == true, onCheckedChange = { onValueChange(item.id to it) },
-        )
-        SadhanaItemId.BOOKS_MIN -> SadhanaTextField(
-            value = item.value.toString(),
-            onValueChange = { onValueChange(item.id to it) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            placeholderText = "30",
-        )
+        SadhanaItemId.KRSHNA_SERVICE,
+        SadhanaItemId.KIRTAN,
         SadhanaItemId.LECTURES -> SadhanaCheckbox(
-            checked = item.value == true, onCheckedChange = { onValueChange(item.id to it) },
+            checked = item.value == true,
+            onCheckedChange = { onValueChange(item.id to it) },
         )
-        SadhanaItemId.LIGHTS_OUT -> SadhanaTextField(
+        else -> SadhanaTextField(
             value = item.value.toString(),
             onValueChange = { onValueChange(item.id to it) },
-            placeholderText = "21:30",
-        )
-        SadhanaItemId.JAPA_07 -> SadhanaTextField(
-            value = item.value.toString(),
-            onValueChange = { onValueChange(item.id to it) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            placeholderText = "16",
-        )
-        SadhanaItemId.JAPA_10,
-        SadhanaItemId.JAPA_18,
-        SadhanaItemId.JAPA_24 -> SadhanaTextField(
-            value = item.value.toString(),
-            onValueChange = { onValueChange(item.id to it) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            enabled = when (item.id) {
+                SadhanaItemId.MORNING_RISE,
+                SadhanaItemId.LIGHTS_OUT -> false
+                else -> true
+            },
+            modifier = when (item.id) {
+                SadhanaItemId.MORNING_RISE,
+                SadhanaItemId.LIGHTS_OUT -> Modifier.clickable { onValueChange(item.id to "04:00") }
+                else -> Modifier
+            },
+            keyboardOptions = when (item.id) {
+                SadhanaItemId.BOOKS_MIN,
+                SadhanaItemId.JAPA_07,
+                SadhanaItemId.JAPA_10,
+                SadhanaItemId.JAPA_18,
+                SadhanaItemId.JAPA_24 -> KeyboardOptions(keyboardType = KeyboardType.Number)
+                else -> KeyboardOptions.Default
+            },
+            placeholderText = when (item.id) {
+                SadhanaItemId.MORNING_RISE -> "04:00"
+                SadhanaItemId.BOOKS_MIN -> "30"
+                SadhanaItemId.LIGHTS_OUT -> "21:30"
+                SadhanaItemId.JAPA_07 -> "16"
+                else -> ""
+            },
         )
     }
 }
@@ -286,13 +286,17 @@ private fun SadhanaCheckbox(
 private fun SadhanaTextField(
     value: String,
     onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     placeholderText: String = "",
 ) = BasicTextField(
     value = value,
     onValueChange = onValueChange,
+    modifier = modifier,
+    enabled = enabled,
     textStyle = TextStyle(
-        color = if (isSystemInDarkTheme()) Color(0xFF969EBD) else Color.Black, //colorResource(id = R.color.sadhana_primary_text_colo)
+        color = if (isSystemInDarkTheme()) Color(0xFF969EBD) else Color.Black,
         textAlign = TextAlign.Center,
     ),
     keyboardOptions = keyboardOptions,
@@ -313,6 +317,22 @@ private fun SadhanaTextField(
         innerTextField()
     }
 )
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TimePickerCompose() {
+    val state = rememberTimePickerState()
+
+    TimePicker(
+        state = state,
+        modifier = Modifier.padding(16.dp)
+    )
+
+//    TimeInput(
+//        state = state,
+//        modifier = Modifier.padding(16.dp)
+//    )
+}
 
 @Composable
 @Preview(showSystemUi = true)
