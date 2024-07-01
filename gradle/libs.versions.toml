@@ -1,9 +1,9 @@
 # suppress inspection "UnusedProperty" for whole file
 # suppress inspection "WrongPropertyKeyValueDelimiter" for whole file
 [versions]
-app                           = "8.4.1"
+app                           = "8.5.0"
 java                          = "17"
-kotlin                        = "1.9.23"
+kotlin                        = "1.9.24"
 
 compileSdk                    = "34"
 minSdk                        = "26"
@@ -13,10 +13,10 @@ versionName                   = "0.0.3"
 
 coroutinesVersion             = "1.8.0"
 roomVersion                   = "2.6.1"
-lifecycleVersion              = "2.7.0"
-uiTooling                     = "1.6.7"
+lifecycleVersion              = "2.8.2"
+uiTooling                     = "1.6.8"
 
-composeBom                    = "2024.05.00"
+composeBom                    = "2024.06.00"
 
 [plugins]
 androidLibrary                = { id = "com.android.library", version.ref = "app" }
@@ -66,19 +66,19 @@ glide-core                    = "com.github.bumptech.glide:glide:4.16.0"
 
 timber                        = "com.jakewharton.timber:timber:5.0.1"
 
-firebase-analytics            = "com.google.firebase:firebase-analytics-ktx:22.0.0"
-firebase-crashlytics          = "com.google.firebase:firebase-crashlytics-ktx:19.0.0"
+firebase-analytics            = "com.google.firebase:firebase-analytics-ktx:22.0.2"
+firebase-crashlytics          = "com.google.firebase:firebase-crashlytics-ktx:19.0.2"
 firebase-messaging            = "com.google.firebase:firebase-messaging-ktx:24.0.0"
-firebase-perf                 = "com.google.firebase:firebase-perf-ktx:21.0.0"
+firebase-perf                 = "com.google.firebase:firebase-perf-ktx:21.0.1"
 
 shimmer                       = "com.facebook.shimmer:shimmer:0.5.0"
 
 # Tests
 mockk                         = "io.mockk:mockk:1.13.8"
 junit                         = "junit:junit:4.13.2"
-androidx-junit                = "androidx.test.ext:junit:1.1.5"
-androidx-junit-ktx            = "androidx.test.ext:junit-ktx:1.1.5"
-androidx-espresso-core        = "androidx.test.espresso:espresso-core:3.5.1"
+androidx-junit                = "androidx.test.ext:junit:1.2.1"
+androidx-junit-ktx            = "androidx.test.ext:junit-ktx:1.2.1"
+androidx-espresso-core        = "androidx.test.espresso:espresso-core:3.6.1"
 kotlin-coroutinesTest         = "org.jetbrains.kotlinx:kotlinx-coroutines-test:coroutinesVersion"
 robolectric                   = "org.robolectric:robolectric:4.11.1"
 

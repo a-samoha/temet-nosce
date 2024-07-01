@@ -11,7 +11,7 @@ android {
     buildFeatures { compose = true }
 
     // check version: https://developer.android.com/jetpack/androidx/releases/compose-kotlin
-    composeOptions { kotlinCompilerExtensionVersion = "1.5.13" }
+    composeOptions { kotlinCompilerExtensionVersion = "1.5.14" }
 }
 
 dependencies {
