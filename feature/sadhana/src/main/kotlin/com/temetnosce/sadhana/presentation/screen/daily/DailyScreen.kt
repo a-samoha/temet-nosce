@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Checkbox
@@ -50,6 +49,7 @@ import com.temetnosce.sadhana.presentation.screen.daily.DailyScreen.Companion.SA
 import com.temetnosce.sadhana.presentation.theme.SadhanaTheme
 import com.temetnosce.sadhana.presentation.theme.SadhanaTypography
 import java.text.SimpleDateFormat
+import java.util.Locale
 
 class DailyScreen(
     private val viewModel: DailyViewModel
@@ -112,7 +112,7 @@ fun DailyScreenContent(
 
             if (uiState.showTimePicker.second) {
                 val sadhanaItemId = uiState.showTimePicker.first
-                val formatter = SimpleDateFormat("HH:mm")
+                val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
 
                 TimePickerDialog(
                     sadhanaItemId,
@@ -283,10 +283,10 @@ fun ValueContainer(
                 else -> KeyboardOptions.Default
             },
             placeholderText = when (item.id) {
-                SadhanaItemId.MORNING_RISE -> "04:00"
-                SadhanaItemId.BOOKS_MIN -> "30"
-                SadhanaItemId.LIGHTS_OUT -> "21:30"
-                SadhanaItemId.JAPA_07 -> "16"
+                SadhanaItemId.MORNING_RISE -> stringResource(id = R.string.sadhana_placeholder_04_00)
+                SadhanaItemId.BOOKS_MIN -> stringResource(id = R.string.sadhana_placeholder_30)
+                SadhanaItemId.LIGHTS_OUT -> stringResource(id = R.string.sadhana_placeholder_21_30)
+                SadhanaItemId.JAPA_07 -> stringResource(id = R.string.sadhana_placeholder_16)
                 else -> ""
             },
         )
@@ -308,7 +308,7 @@ private fun SadhanaCheckbox(
 @Composable
 private fun SadhanaTextField(
     value: String,
-    onValueChange: (String) -> Unit,
+    onValueChange: (String) -> Unit, // clear focus https://stackoverflow.com/a/67058925
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -320,24 +320,22 @@ private fun SadhanaTextField(
     enabled = enabled,
     textStyle = TextStyle(
         color = if (isSystemInDarkTheme()) Color(0xFF969EBD) else Color.Black,
+        fontSize = 18.sp,
         textAlign = TextAlign.Center,
     ),
     keyboardOptions = keyboardOptions,
     singleLine = true,
     decorationBox = { innerTextField ->
-        Box {
+        Box(contentAlignment = Alignment.Center) {
             if (value.isBlank()) {
                 Text(
                     text = placeholderText,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .wrapContentSize(),
                     color = if (isSystemInDarkTheme()) Color(0xFF969EBD) else Color.LightGray,
                     fontSize = 14.sp
                 )
             }
+            innerTextField()
         }
-        innerTextField()
     }
 )
 
