@@ -60,28 +60,28 @@ data class DailyModel(
             SadhanaItemId.JAPA_07,
             R.string.sadhana_japa,
             null,
-            R.string.sadhana_time_0730,
+            R.string.sadhana_time_07_30,
             value = if (japa7 == 0.toShort()) "" else japa7
         ),
         SadhanaItemModel(
             SadhanaItemId.JAPA_10,
             null,
             null,
-            R.string.sadhana_time_1000,
+            R.string.sadhana_time_10_00,
             value = if (japa10 == 0.toShort()) "" else japa10
         ),
         SadhanaItemModel(
             SadhanaItemId.JAPA_18,
             null,
             null,
-            R.string.sadhana_time_1800,
+            R.string.sadhana_time_18_00,
             value = if (japa18 == 0.toShort()) "" else japa18
         ),
         SadhanaItemModel(
             SadhanaItemId.JAPA_24,
             null,
             null,
-            R.string.sadhana_time_2400,
+            R.string.sadhana_time_24_00,
             value = if (japa24 == 0.toShort()) "" else japa24
         ),
     )

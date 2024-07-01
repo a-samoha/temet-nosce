@@ -5,7 +5,7 @@ import com.temetnosce.sadhana.domain.model.SadhanaItemId
 import com.temetnosce.sadhana.domain.model.SadhanaItemModel
 import com.temetnosce.sadhana.domain.usecase.GetDailySadhanaUseCase
 import com.temetnosce.sadhana.domain.usecase.InsertDailySadhanaUseCase
-import com.temetnosce.sadhana.presentation.core.ui.EmptyEvent
+import com.temetnosce.sadhana.presentation.core.ui.EmptyEffect
 import com.temetnosce.sadhana.presentation.core.ui.UiState
 import com.temetnosce.sadhana.presentation.core.viewmodel.MviViewModel
 import kotlinx.coroutines.launch
@@ -13,9 +13,9 @@ import kotlinx.coroutines.launch
 class DailyViewModel(
     private val getDailySadhanaUseCase: GetDailySadhanaUseCase,
     private val saveDailySadhanaUseCase: InsertDailySadhanaUseCase,
-) : MviViewModel<DailyUiState, EmptyEvent>() {
+) : MviViewModel<DailyUiState, EmptyEffect>() {
 
-    override val emptyState = DailyUiState.Uninitialized
+    override val initialState = DailyUiState.Uninitialized
 
     init {
         viewModelScope.launch {
@@ -24,7 +24,6 @@ class DailyViewModel(
                 .onSuccess {
                     emitState(
                         DailyUiState.Content(
-                            bottomSheet = DailyUiState.Sheet.None,
                             content = it.toSadhanaItemsList()
                         )
                     )
@@ -32,7 +31,12 @@ class DailyViewModel(
         }
     }
 
-    fun onBooksChanged(value: Pair<SadhanaItemId, Any>) {
+    fun showTimePicker() {
+        val currentState = (currentState as? DailyUiState.Content)
+        currentState?.copy(showTimePicker = true)?.let(::emitState)
+    }
+
+    fun onSadhanaItemValueChange(value: Pair<SadhanaItemId, Any>) {
         val currentState = (currentState as? DailyUiState.Content)
         currentState?.copy(content = currentState.content.map {
             if (it.id == value.first) it.copy(value = value.second)
@@ -43,24 +47,10 @@ class DailyViewModel(
 
 sealed interface DailyUiState : UiState {
 
-    val bottomSheet: Sheet
-
-    data object Uninitialized : DailyUiState {
-        override val bottomSheet = Sheet.None
-    }
+    data object Uninitialized : DailyUiState
 
     data class Content(
-        override val bottomSheet: Sheet = Sheet.None,
-        val content: List<SadhanaItemModel>
+        val content: List<SadhanaItemModel>,
+        val showTimePicker: Boolean = false,
     ) : DailyUiState
-
-    fun withSheet(value: Sheet): DailyUiState = when (this) {
-        is Content -> copy(bottomSheet = value)
-        else -> this
-    }
-
-    sealed interface Sheet {
-        data object None : Sheet
-        data object SelectLanguage : Sheet
-    }
 }

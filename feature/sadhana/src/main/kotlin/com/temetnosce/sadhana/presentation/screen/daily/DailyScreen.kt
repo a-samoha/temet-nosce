@@ -24,7 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TimePicker
+import androidx.compose.material3.TimeInput
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
@@ -45,7 +45,7 @@ import com.temetnosce.sadhana.R
 import com.temetnosce.sadhana.domain.model.DailyModel
 import com.temetnosce.sadhana.domain.model.SadhanaItemId
 import com.temetnosce.sadhana.domain.model.SadhanaItemModel
-import com.temetnosce.sadhana.presentation.core.ui.EmptyEvent
+import com.temetnosce.sadhana.presentation.core.ui.EmptyEffect
 import com.temetnosce.sadhana.presentation.core.ui.MviScreen
 import com.temetnosce.sadhana.presentation.screen.daily.DailyScreen.Companion.JAPA_ITEMS
 import com.temetnosce.sadhana.presentation.screen.daily.DailyScreen.Companion.SADHANA_ITEMS
@@ -55,14 +55,15 @@ import com.temetnosce.sadhana.presentation.theme.SadhanaTypography
 
 class DailyScreen(
     private val viewModel: DailyViewModel
-) : MviScreen<DailyUiState, EmptyEvent>(viewModel) {
+) : MviScreen<DailyUiState, EmptyEffect>(viewModel) {
 
     @Composable
     override fun Content() {
         SadhanaTheme {
-            ScreenContent(
+            DailyScreenContent(
                 viewModel.uiState.collectAsStateWithLifecycle().value,
-                viewModel::onBooksChanged,
+                viewModel::onSadhanaItemValueChange,
+                viewModel::showTimePicker,
             )
         }
     }
@@ -75,31 +76,43 @@ class DailyScreen(
 }
 
 @Composable
-fun ScreenContent(
+fun DailyScreenContent(
     uiState: DailyUiState,
-    onValueChange: (Pair<SadhanaItemId, Any>) -> Unit = {}
+    onSadhanaItemValueChange: (Pair<SadhanaItemId, Any>) -> Unit = {},
+    showTimePicker: () -> Unit = {},
 ) {
     when (uiState) {
         is DailyUiState.Uninitialized -> ShowLoading()
         is DailyUiState.Content -> {
-            val elements = uiState.content
+            val items = uiState.content
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Title(R.string.sadhana_my_sadhana_today)
                 Column {
-                    repeat(SADHANA_ITEMS) { item ->
-                        SadhanaItem(elements[item], onValueChange = onValueChange)
+                    repeat(SADHANA_ITEMS) { i -> // list item position from 0
+                        SadhanaItem(
+                            items[i],
+                            onValueChange = onSadhanaItemValueChange,
+                            showTimePicker
+                        )
                     }
                 }
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                 Spacer(modifier = Modifier.height(16.dp))
                 Column {
-                    repeat(JAPA_ITEMS) { item ->
-                        SadhanaItem(elements[SADHANA_ITEMS + item], onValueChange = onValueChange)
+                    repeat(JAPA_ITEMS) { i ->
+                        SadhanaItem(
+                            items[SADHANA_ITEMS + i],
+                            onValueChange = onSadhanaItemValueChange,
+                            showTimePicker = showTimePicker,
+                        )
                     }
                 }
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            }
+            if (uiState.showTimePicker) {
+                TimePickerCompose()
             }
         }
     }
@@ -131,13 +144,12 @@ fun Title(titleRes: Int) {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SadhanaItem(
     item: SadhanaItemModel,
     onValueChange: (Pair<SadhanaItemId, Any>) -> Unit,
+    showTimePicker: () -> Unit,
 ) {
-    // For each item in the list, create a horizontal composition
     Column {
         HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
         Row(
@@ -153,7 +165,8 @@ fun SadhanaItem(
             ValueContainer(
                 item = item,
                 onValueChange = onValueChange,
-                modifier = Modifier.weight(1f)
+                showTimePicker = showTimePicker,
+                modifier = Modifier.weight(1f),
             )
             VerticalDivider(modifier = Modifier.padding(end = 24.dp))
         }
@@ -226,6 +239,7 @@ fun IconOrText(
 fun ValueContainer(
     item: SadhanaItemModel,
     onValueChange: (Pair<SadhanaItemId, Any>) -> Unit,
+    showTimePicker: () -> Unit,
     modifier: Modifier,
 ) = Box(
     contentAlignment = Alignment.Center,
@@ -248,7 +262,7 @@ fun ValueContainer(
             },
             modifier = when (item.id) {
                 SadhanaItemId.MORNING_RISE,
-                SadhanaItemId.LIGHTS_OUT -> Modifier.clickable { onValueChange(item.id to "04:00") }
+                SadhanaItemId.LIGHTS_OUT -> Modifier.clickable { showTimePicker() }
                 else -> Modifier
             },
             keyboardOptions = when (item.id) {
@@ -323,21 +337,21 @@ private fun SadhanaTextField(
 fun TimePickerCompose() {
     val state = rememberTimePickerState()
 
-    TimePicker(
-        state = state,
-        modifier = Modifier.padding(16.dp)
-    )
-
-//    TimeInput(
+//    TimePicker(
 //        state = state,
 //        modifier = Modifier.padding(16.dp)
 //    )
+
+    TimeInput(
+        state = state,
+        modifier = Modifier.padding(16.dp)
+    )
 }
 
 @Composable
 @Preview(showSystemUi = true)
 private fun PreviewScreenContent() {
-    ScreenContent(
+    DailyScreenContent(
         uiState = DailyUiState.Content(
             content = DailyModel.EMPTY.toSadhanaItemsList()
         )

@@ -3,7 +3,7 @@
 package com.temetnosce.sadhana.presentation.core.ui
 
 interface UiState
-interface UiEvent
+interface UiEffect
 
 object EmptyState : UiState
-object EmptyEvent : UiEvent
+object EmptyEffect : UiEffect
