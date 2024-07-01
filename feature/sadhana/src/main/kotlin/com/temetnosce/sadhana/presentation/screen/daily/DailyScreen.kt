@@ -20,13 +20,10 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TimeInput
 import androidx.compose.material3.VerticalDivider
-import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,6 +49,7 @@ import com.temetnosce.sadhana.presentation.screen.daily.DailyScreen.Companion.SA
 import com.temetnosce.sadhana.presentation.screen.daily.DailyScreen.Companion.SADHANA_ITEM_HEIGHT
 import com.temetnosce.sadhana.presentation.theme.SadhanaTheme
 import com.temetnosce.sadhana.presentation.theme.SadhanaTypography
+import java.text.SimpleDateFormat
 
 class DailyScreen(
     private val viewModel: DailyViewModel
@@ -79,7 +77,7 @@ class DailyScreen(
 fun DailyScreenContent(
     uiState: DailyUiState,
     onSadhanaItemValueChange: (Pair<SadhanaItemId, Any>) -> Unit = {},
-    showTimePicker: () -> Unit = {},
+    showTimePicker: (SadhanaItemId, Boolean) -> Unit = { _, _ -> },
 ) {
     when (uiState) {
         is DailyUiState.Uninitialized -> ShowLoading()
@@ -94,7 +92,7 @@ fun DailyScreenContent(
                         SadhanaItem(
                             items[i],
                             onValueChange = onSadhanaItemValueChange,
-                            showTimePicker
+                            showTimePicker = showTimePicker,
                         )
                     }
                 }
@@ -111,8 +109,19 @@ fun DailyScreenContent(
                 }
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
             }
-            if (uiState.showTimePicker) {
-                TimePickerCompose()
+
+            if (uiState.showTimePicker.second) {
+                val sadhanaItemId = uiState.showTimePicker.first
+                val formatter = SimpleDateFormat("HH:mm")
+
+                TimePickerDialog(
+                    sadhanaItemId,
+                    onCancel = { showTimePicker(sadhanaItemId, false) },
+                    onConfirm = { calendar ->
+                        onSadhanaItemValueChange(sadhanaItemId to formatter.format(calendar.time))
+                        showTimePicker(sadhanaItemId, false)
+                    },
+                )
             }
         }
     }
@@ -148,7 +157,7 @@ fun Title(titleRes: Int) {
 fun SadhanaItem(
     item: SadhanaItemModel,
     onValueChange: (Pair<SadhanaItemId, Any>) -> Unit,
-    showTimePicker: () -> Unit,
+    showTimePicker: (SadhanaItemId, Boolean) -> Unit,
 ) {
     Column {
         HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -239,7 +248,7 @@ fun IconOrText(
 fun ValueContainer(
     item: SadhanaItemModel,
     onValueChange: (Pair<SadhanaItemId, Any>) -> Unit,
-    showTimePicker: () -> Unit,
+    showTimePicker: (SadhanaItemId, Boolean) -> Unit,
     modifier: Modifier,
 ) = Box(
     contentAlignment = Alignment.Center,
@@ -262,7 +271,7 @@ fun ValueContainer(
             },
             modifier = when (item.id) {
                 SadhanaItemId.MORNING_RISE,
-                SadhanaItemId.LIGHTS_OUT -> Modifier.clickable { showTimePicker() }
+                SadhanaItemId.LIGHTS_OUT -> Modifier.clickable { showTimePicker(item.id, true) }
                 else -> Modifier
             },
             keyboardOptions = when (item.id) {
@@ -331,22 +340,6 @@ private fun SadhanaTextField(
         innerTextField()
     }
 )
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TimePickerCompose() {
-    val state = rememberTimePickerState()
-
-//    TimePicker(
-//        state = state,
-//        modifier = Modifier.padding(16.dp)
-//    )
-
-    TimeInput(
-        state = state,
-        modifier = Modifier.padding(16.dp)
-    )
-}
 
 @Composable
 @Preview(showSystemUi = true)

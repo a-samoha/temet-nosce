@@ -2,6 +2,7 @@ package com.temetnosce.sadhana.presentation.screen.daily
 
 import androidx.lifecycle.viewModelScope
 import com.temetnosce.sadhana.domain.model.SadhanaItemId
+import com.temetnosce.sadhana.domain.model.SadhanaItemId.MORNING_RISE
 import com.temetnosce.sadhana.domain.model.SadhanaItemModel
 import com.temetnosce.sadhana.domain.usecase.GetDailySadhanaUseCase
 import com.temetnosce.sadhana.domain.usecase.InsertDailySadhanaUseCase
@@ -31,9 +32,9 @@ class DailyViewModel(
         }
     }
 
-    fun showTimePicker() {
+    fun showTimePicker(sadhanaItemId: SadhanaItemId, isVisible: Boolean) {
         val currentState = (currentState as? DailyUiState.Content)
-        currentState?.copy(showTimePicker = true)?.let(::emitState)
+        currentState?.copy(showTimePicker = sadhanaItemId to isVisible)?.let(::emitState)
     }
 
     fun onSadhanaItemValueChange(value: Pair<SadhanaItemId, Any>) {
@@ -51,6 +52,6 @@ sealed interface DailyUiState : UiState {
 
     data class Content(
         val content: List<SadhanaItemModel>,
-        val showTimePicker: Boolean = false,
+        val showTimePicker: Pair<SadhanaItemId, Boolean> = MORNING_RISE to false,
     ) : DailyUiState
 }
