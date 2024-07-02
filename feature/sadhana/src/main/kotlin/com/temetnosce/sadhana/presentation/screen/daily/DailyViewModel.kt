@@ -1,9 +1,11 @@
 package com.temetnosce.sadhana.presentation.screen.daily
 
 import androidx.lifecycle.viewModelScope
+import com.temetnosce.sadhana.domain.model.DailyModel
 import com.temetnosce.sadhana.domain.model.SadhanaItemId
 import com.temetnosce.sadhana.domain.model.SadhanaItemId.MORNING_RISE
 import com.temetnosce.sadhana.domain.model.SadhanaItemModel
+import com.temetnosce.sadhana.domain.model.toDailyModel
 import com.temetnosce.sadhana.domain.usecase.GetDailySadhanaUseCase
 import com.temetnosce.sadhana.domain.usecase.InsertDailySadhanaUseCase
 import com.temetnosce.sadhana.presentation.core.ui.EmptyEffect
@@ -21,7 +23,14 @@ class DailyViewModel(
     init {
         viewModelScope.launch {
             getDailySadhanaUseCase()
-                .onFailure { }
+                .onFailure {
+                    println("test error ${it.printStackTrace()}")
+                    emitState(
+                        DailyUiState.Content(
+                            content = DailyModel.EMPTY.toSadhanaItemsList()
+                        )
+                    )
+                }
                 .onSuccess {
                     emitState(
                         DailyUiState.Content(
@@ -44,6 +53,16 @@ class DailyViewModel(
             else it
         })?.let(::emitState)
     }
+
+    fun onConfirmClick() {
+        viewModelScope.launch {
+            val data = (currentState as? DailyUiState.Content)?.content?.toDailyModel()
+                ?: DailyModel.EMPTY
+            saveDailySadhanaUseCase(data)
+                .onFailure { }
+                .onSuccess { }
+        }
+    }
 }
 
 sealed interface DailyUiState : UiState {
@@ -53,5 +72,6 @@ sealed interface DailyUiState : UiState {
     data class Content(
         val content: List<SadhanaItemModel>,
         val showTimePicker: Pair<SadhanaItemId, Boolean> = MORNING_RISE to false,
+        val isLoading: Boolean = false,
     ) : DailyUiState
 }

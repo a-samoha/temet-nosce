@@ -103,3 +103,33 @@ data class DailyModel(
         )
     }
 }
+
+fun List<SadhanaItemModel>.toDailyModel(): DailyModel {
+    var dailyModel = DailyModel.EMPTY
+        .copy(date = Date())
+    this.forEach { sadhanaItem ->
+        dailyModel = when (sadhanaItem.id) {
+            SadhanaItemId.MORNING_RISE -> dailyModel.copy(awake = "${sadhanaItem.value}")
+            SadhanaItemId.KRSHNA_SERVICE -> dailyModel.copy(service = sadhanaItem.value as Boolean)
+            SadhanaItemId.KIRTAN -> dailyModel.copy(kirtan = sadhanaItem.value as Boolean)
+            SadhanaItemId.BOOKS_MIN -> dailyModel.copy(
+                books = sadhanaItem.value.toString()
+                    .let { if (it.isNotBlank()) it.toShort() else 0 })
+            SadhanaItemId.LECTURES -> dailyModel.copy(lectures = sadhanaItem.value as Boolean)
+            SadhanaItemId.LIGHTS_OUT -> dailyModel.copy(sleep = "${sadhanaItem.value}")
+            SadhanaItemId.JAPA_07 -> dailyModel.copy(
+                japa7 = sadhanaItem.value.toString()
+                    .let { if (it.isNotBlank()) it.toShort() else 0 })
+            SadhanaItemId.JAPA_10 -> dailyModel.copy(
+                japa10 = sadhanaItem.value.toString()
+                    .let { if (it.isNotBlank()) it.toShort() else 0 })
+            SadhanaItemId.JAPA_18 -> dailyModel.copy(
+                japa18 = sadhanaItem.value.toString()
+                    .let { if (it.isNotBlank()) it.toShort() else 0 })
+            SadhanaItemId.JAPA_24 -> dailyModel.copy(
+                japa24 = sadhanaItem.value.toString()
+                    .let { if (it.isNotBlank()) it.toShort() else 0 })
+        }
+    }
+    return dailyModel
+}

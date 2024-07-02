@@ -6,6 +6,7 @@ java                          = "17"
 kotlin                        = "1.9.24"
 
 compileSdk                    = "34"
+kotlinxDatetime               = "0.6.0"
 minSdk                        = "26"
 targetSdk                     = "34"
 versionCode                   = "1"
@@ -13,7 +14,7 @@ versionName                   = "0.0.3"
 
 coroutinesVersion             = "1.8.0"
 roomVersion                   = "2.6.1"
-lifecycleVersion              = "2.8.2"
+lifecycleVersion              = "2.8.3"
 uiTooling                     = "1.6.8"
 
 composeBom                    = "2024.06.00"
@@ -43,6 +44,7 @@ androidx-compose-ui-tooling   = { group = "androidx.compose.ui", name = "ui-tool
 
 kotlin-coroutinesCore         = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutinesVersion" }
 kotlin-stdLib                 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlinx-datetime              = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 
 koin-android                  = "io.insert-koin:koin-android:3.5.0"
 koin-compose                  = "io.insert-koin:koin-androidx-compose:3.4.6"

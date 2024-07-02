@@ -62,6 +62,7 @@ class DailyScreen(
                 viewModel.uiState.collectAsStateWithLifecycle().value,
                 viewModel::onSadhanaItemValueChange,
                 viewModel::showTimePicker,
+                viewModel::onConfirmClick,
             )
         }
     }
@@ -78,6 +79,7 @@ fun DailyScreenContent(
     uiState: DailyUiState,
     onSadhanaItemValueChange: (Pair<SadhanaItemId, Any>) -> Unit = {},
     showTimePicker: (SadhanaItemId, Boolean) -> Unit = { _, _ -> },
+    onConfirmClick: () -> Unit = {},
 ) {
     when (uiState) {
         is DailyUiState.Uninitialized -> ShowLoading()
@@ -119,6 +121,7 @@ fun DailyScreenContent(
                         color = colorResource(id = R.color.sadhana_primary_color),
                     )
                     Text(
+                        modifier = Modifier.clickable { onConfirmClick() },
                         text = stringResource(R.string.sadhana_confirm),
                         style = SadhanaTypography.headlineSmall,
                         color = colorResource(id = R.color.sadhana_primary_color),
@@ -131,7 +134,6 @@ fun DailyScreenContent(
                 val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
 
                 TimePickerDialog(
-                    sadhanaItemId,
                     onCancel = { showTimePicker(sadhanaItemId, false) },
                     onConfirm = { calendar ->
                         onSadhanaItemValueChange(sadhanaItemId to formatter.format(calendar.time))
