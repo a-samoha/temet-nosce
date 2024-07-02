@@ -108,6 +108,22 @@ fun DailyScreenContent(
                     }
                 }
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                Spacer(modifier = Modifier.height(32.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    Text(
+                        text = stringResource(R.string.sadhana_per_month),
+                        style = SadhanaTypography.headlineSmall,
+                        color = colorResource(id = R.color.sadhana_primary_color),
+                    )
+                    Text(
+                        text = stringResource(R.string.sadhana_confirm),
+                        style = SadhanaTypography.headlineSmall,
+                        color = colorResource(id = R.color.sadhana_primary_color),
+                    )
+                }
             }
 
             if (uiState.showTimePicker.second) {

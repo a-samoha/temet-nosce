@@ -16,4 +16,6 @@
     <string name="sadhana_placeholder_30">30</string>
     <string name="sadhana_placeholder_21_30">21:30</string>
     <string name="sadhana_placeholder_16">16</string>
+    <string name="sadhana_per_month">ЗА МІСЯЦЬ</string>
+    <string name="sadhana_confirm">ЗБЕРЕГТИ</string>
 </resources>
