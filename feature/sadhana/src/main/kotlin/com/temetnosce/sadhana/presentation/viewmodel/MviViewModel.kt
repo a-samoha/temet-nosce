@@ -1,13 +1,11 @@
 @file:Suppress("MemberVisibilityCanBePrivate", "unused")
 
-package com.temetnosce.sadhana.presentation.core.viewmodel
+package com.temetnosce.sadhana.presentation.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.temetnosce.sadhana.BuildConfig
-import com.temetnosce.sadhana.presentation.core.ui.UiEvent
-import com.temetnosce.sadhana.presentation.core.ui.UiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -15,10 +13,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-abstract class ViewModel<S : UiState, E : UiEvent> : ViewModel() {
+abstract class MviViewModel<S : MviState, I : MviIntent, E : MviEffect> : ViewModel() {
 
     abstract val initialState: S
 
@@ -32,14 +29,11 @@ abstract class ViewModel<S : UiState, E : UiEvent> : ViewModel() {
     val eventsStream: Flow<E> = _eventsChannel.receiveAsFlow()
 
     /**
-     * Updates the state atomically using the specified [mutation] of its value.
-     * [mutation] may be evaluated multiple times, if value is being concurrently updated.
+     * Callback function that supposed to receive an [intent] from UI layer.
      *
-     * @param mutation the mapping function to be applied to update the state.
+     * Should be overridden and implemented in
      */
-    protected fun updateState(mutation: (S) -> S) = _uiState.update {
-        mutation(it)
-    }
+    open fun processIntent(intent: I) = Unit
 
     /**
      * Delivers a new value to the [state].

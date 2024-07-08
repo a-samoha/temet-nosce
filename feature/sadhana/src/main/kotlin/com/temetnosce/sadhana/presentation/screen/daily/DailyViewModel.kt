@@ -9,17 +9,21 @@ import com.temetnosce.sadhana.domain.model.SadhanaItemModel
 import com.temetnosce.sadhana.domain.model.toDailyModel
 import com.temetnosce.sadhana.domain.usecase.GetDailySadhanaUseCase
 import com.temetnosce.sadhana.domain.usecase.InsertDailySadhanaUseCase
-import com.temetnosce.sadhana.presentation.core.ui.UiEvent
-import com.temetnosce.sadhana.presentation.core.ui.UiState
-import com.temetnosce.sadhana.presentation.core.viewmodel.ViewModel
+import com.temetnosce.sadhana.presentation.screen.daily.DailyIntent.ConfirmClick
+import com.temetnosce.sadhana.presentation.screen.daily.DailyIntent.SadhanaItemValueChange
+import com.temetnosce.sadhana.presentation.screen.daily.DailyIntent.ShowTimePicker
+import com.temetnosce.sadhana.presentation.viewmodel.EmptyEffect
+import com.temetnosce.sadhana.presentation.viewmodel.MviIntent
+import com.temetnosce.sadhana.presentation.viewmodel.MviState
+import com.temetnosce.sadhana.presentation.viewmodel.MviViewModel
 import kotlinx.coroutines.launch
 
-class DailyViewModel(
+class DailyMviViewModel(
     private val getDailySadhanaUseCase: GetDailySadhanaUseCase,
     private val saveDailySadhanaUseCase: InsertDailySadhanaUseCase,
-) : ViewModel<DailyUiState, DailyUiEvent>() {
+) : MviViewModel<DailyState, DailyIntent, EmptyEffect>() {
 
-    override val initialState = DailyUiState()
+    override val initialState = DailyState()
 
     init {
         viewModelScope.launch {
@@ -27,28 +31,32 @@ class DailyViewModel(
                 .onFailure {}
                 .onSuccess {
                     emitState(
-                        DailyUiState(content = it.toSadhanaItemsList())
+                        DailyState(content = it.toSadhanaItemsList())
                     )
                 }
         }
     }
 
-    fun showTimePicker(sadhanaItemId: SadhanaItemId, isVisible: Boolean) {
-        val currentState = (currentState as? DailyUiState)
-        currentState?.copy(showTimePicker = sadhanaItemId to isVisible)?.let(::emitState)
+    override fun processIntent(intent: DailyIntent) = when (intent) {
+        is ShowTimePicker -> showTimePicker(intent)
+        is SadhanaItemValueChange -> onSadhanaItemValueChange(intent)
+        ConfirmClick -> onConfirmClick()
     }
 
-    fun onSadhanaItemValueChange(value: Pair<SadhanaItemId, Any>) {
-        val currentState = (currentState as? DailyUiState)
-        currentState?.copy(content = currentState.content.map {
-            if (it.id == value.first) it.copy(value = value.second)
-            else it
-        })?.let(::emitState)
-    }
+    private fun showTimePicker(intent: ShowTimePicker) = emitState(
+        currentState.copy(showTimePicker = intent.sadhanaItemId to intent.isVisible)
+    )
 
-    fun onConfirmClick() {
+    private fun onSadhanaItemValueChange(intent: SadhanaItemValueChange) = emitState(
+        currentState.copy(content = currentState.content.map { item ->
+            if (item.id == intent.sadhanaItemId) item.copy(value = intent.value)
+            else item
+        })
+    )
+
+    private fun onConfirmClick() {
         viewModelScope.launch {
-            val data = (currentState as? DailyUiState)?.content?.toDailyModel()
+            val data = (currentState as? DailyState)?.content?.toDailyModel()
                 ?: DailyModel.EMPTY
             saveDailySadhanaUseCase(data)
                 .onFailure { }
@@ -58,20 +66,24 @@ class DailyViewModel(
 }
 
 @Immutable
-data class DailyUiState(
+data class DailyState(
     val isLoading: Boolean = false,
     val content: List<SadhanaItemModel> = DailyModel.EMPTY.toSadhanaItemsList(),
     val showTimePicker: Pair<SadhanaItemId, Boolean> = MORNING_RISE to false,
-) : UiState
+) : MviState
 
-sealed interface DailyUiEvent : UiEvent {
-
-    data class Loading(
-        val isLoading: Boolean = false
-    ) : DailyUiEvent
+@Immutable
+sealed interface DailyIntent : MviIntent {
 
     data class ShowTimePicker(
-        val itemId: SadhanaItemId,
-        val isEnabled: Boolean = false
-    ) : DailyUiEvent
+        val sadhanaItemId: SadhanaItemId,
+        val isVisible: Boolean
+    ) : DailyIntent
+
+    data class SadhanaItemValueChange(
+        val sadhanaItemId: SadhanaItemId,
+        val value: Any
+    ) : DailyIntent
+
+    data object ConfirmClick : DailyIntent
 }

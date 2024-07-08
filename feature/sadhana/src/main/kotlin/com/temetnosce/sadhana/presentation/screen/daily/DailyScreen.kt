@@ -40,7 +40,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.temetnosce.sadhana.R
 import com.temetnosce.sadhana.domain.model.SadhanaItemId
 import com.temetnosce.sadhana.domain.model.SadhanaItemModel
-import com.temetnosce.sadhana.presentation.core.ui.Screen
+import com.temetnosce.sadhana.presentation.screen.daily.DailyIntent.ConfirmClick
+import com.temetnosce.sadhana.presentation.screen.daily.DailyIntent.SadhanaItemValueChange
+import com.temetnosce.sadhana.presentation.screen.daily.DailyIntent.ShowTimePicker
 import com.temetnosce.sadhana.presentation.theme.SadhanaTheme
 import com.temetnosce.sadhana.presentation.theme.SadhanaTypography
 import org.koin.androidx.compose.koinViewModel
@@ -53,33 +55,23 @@ private val JAPA_ITEMS = 4
 
 @Composable
 fun DailyScreen() {
-    val viewModel = koinViewModel<DailyViewModel>()
-
+    val viewModel = koinViewModel<DailyMviViewModel>()
     SadhanaTheme {
-        Screen(
-            viewModel = viewModel,
-            content = {
-                DailyScreenContent(
-                    viewModel.uiState.collectAsStateWithLifecycle().value,
-                    viewModel::onSadhanaItemValueChange,
-                    viewModel::showTimePicker,
-                    viewModel::onConfirmClick,
-                )
-            }
+        DailyScreenContent(
+            viewModel.uiState.collectAsStateWithLifecycle().value,
+            viewModel::processIntent,
         )
     }
 }
 
 @Composable
 fun DailyScreenContent(
-    uiState: DailyUiState,
-    onSadhanaItemValueChange: (Pair<SadhanaItemId, Any>) -> Unit = {},
-    showTimePicker: (SadhanaItemId, Boolean) -> Unit = { _, _ -> },
-    onConfirmClick: () -> Unit = {},
+    uiState: DailyState,
+    processIntent: (DailyIntent) -> Unit,
 ) {
     // region Loading
     if (uiState.isLoading) {
-
+        ShowLoading()
     }
     // endregion
 
@@ -89,10 +81,15 @@ fun DailyScreenContent(
         val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
 
         TimePickerDialog(
-            onCancel = { showTimePicker(sadhanaItemId, false) },
+            onCancel = { processIntent(ShowTimePicker(sadhanaItemId, false)) },
             onConfirm = { calendar ->
-                onSadhanaItemValueChange(sadhanaItemId to formatter.format(calendar.time))
-                showTimePicker(sadhanaItemId, false)
+                processIntent(ShowTimePicker(sadhanaItemId, false))
+                processIntent(
+                    SadhanaItemValueChange(
+                        sadhanaItemId,
+                        formatter.format(calendar.time)
+                    )
+                )
             },
         )
     }
@@ -108,8 +105,7 @@ fun DailyScreenContent(
             repeat(SADHANA_ITEMS) { i -> // list item position from 0
                 SadhanaItem(
                     items[i],
-                    onValueChange = onSadhanaItemValueChange,
-                    showTimePicker = showTimePicker,
+                    processIntent = processIntent,
                 )
             }
         }
@@ -119,8 +115,7 @@ fun DailyScreenContent(
             repeat(JAPA_ITEMS) { i ->
                 SadhanaItem(
                     items[SADHANA_ITEMS + i],
-                    onValueChange = onSadhanaItemValueChange,
-                    showTimePicker = showTimePicker,
+                    processIntent = processIntent,
                 )
             }
         }
@@ -136,7 +131,7 @@ fun DailyScreenContent(
                 color = colorResource(id = R.color.sadhana_primary_color),
             )
             Text(
-                modifier = Modifier.clickable { onConfirmClick() },
+                modifier = Modifier.clickable { processIntent(ConfirmClick) },
                 text = stringResource(R.string.sadhana_confirm),
                 style = SadhanaTypography.headlineSmall,
                 color = colorResource(id = R.color.sadhana_primary_color),
@@ -175,8 +170,7 @@ fun Title(titleRes: Int) {
 @Composable
 fun SadhanaItem(
     item: SadhanaItemModel,
-    onValueChange: (Pair<SadhanaItemId, Any>) -> Unit,
-    showTimePicker: (SadhanaItemId, Boolean) -> Unit,
+    processIntent: (DailyIntent) -> Unit,
 ) {
     Column {
         HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -192,8 +186,7 @@ fun SadhanaItem(
             VerticalDivider()
             ValueContainer(
                 item = item,
-                onValueChange = onValueChange,
-                showTimePicker = showTimePicker,
+                processIntent = processIntent,
                 modifier = Modifier.weight(1f),
             )
             VerticalDivider(modifier = Modifier.padding(end = 24.dp))
@@ -267,8 +260,7 @@ fun IconOrText(
 @Composable
 fun ValueContainer(
     item: SadhanaItemModel,
-    onValueChange: (Pair<SadhanaItemId, Any>) -> Unit,
-    showTimePicker: (SadhanaItemId, Boolean) -> Unit,
+    processIntent: (DailyIntent) -> Unit,
     modifier: Modifier,
 ) = Box(
     contentAlignment = Alignment.Center,
@@ -279,22 +271,22 @@ fun ValueContainer(
         SadhanaItemId.KIRTAN,
         SadhanaItemId.LECTURES -> SadhanaCheckbox(
             checked = item.value == true,
-            onCheckedChange = { onValueChange(item.id to it) },
+            onCheckedChange = { processIntent(SadhanaItemValueChange(item.id, it)) },
         )
 
         else -> SadhanaTextField(
             value = item.value.toString(),
-            onValueChange = { onValueChange(item.id to it) },
+            onValueChange = { processIntent(SadhanaItemValueChange(item.id, it)) },
             enabled = when (item.id) {
                 SadhanaItemId.MORNING_RISE,
                 SadhanaItemId.LIGHTS_OUT -> false
-
                 else -> true
             },
             modifier = when (item.id) {
                 SadhanaItemId.MORNING_RISE,
-                SadhanaItemId.LIGHTS_OUT -> Modifier.clickable { showTimePicker(item.id, true) }
-
+                SadhanaItemId.LIGHTS_OUT -> Modifier.clickable {
+                    processIntent(ShowTimePicker(item.id, true))
+                }
                 else -> Modifier
             },
             keyboardOptions = when (item.id) {
@@ -303,7 +295,6 @@ fun ValueContainer(
                 SadhanaItemId.JAPA_10,
                 SadhanaItemId.JAPA_18,
                 SadhanaItemId.JAPA_24 -> KeyboardOptions(keyboardType = KeyboardType.Number)
-
                 else -> KeyboardOptions.Default
             },
             placeholderText = when (item.id) {
@@ -367,6 +358,7 @@ private fun SadhanaTextField(
 @Preview(showSystemUi = true)
 private fun PreviewScreenContent() {
     DailyScreenContent(
-        uiState = DailyUiState()
+        uiState = DailyState(),
+        processIntent = {},
     )
 }
