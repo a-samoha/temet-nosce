@@ -1,41 +1,19 @@
 package com.temetnosce.sadhana.presentation.core.ui
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.luminance
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.temetnosce.sadhana.presentation.core.viewmodel.ViewModel
 
-abstract class Screen {
+@Composable
+fun <S : UiState, E : UiEvent> Screen(
+    viewModel: ViewModel<S, E>,
+    content: @Composable (state: S) -> Unit,
+    launchEvent: @Composable (event: UiEvent) -> Unit = {},
+) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    content(state)
 
-    @Composable
-    protected open fun statusBarColor(): Color = MaterialTheme.colorScheme.background
-
-    @Composable
-    protected open fun statusBarDarkIcons(): Boolean = statusBarColor().luminance() > 0.5f
-
-    @Composable
-    protected open fun navigationBarColor(): Color = MaterialTheme.colorScheme.background
-
-    @Composable
-    open fun Bind() {
-        ApplySystemUiColors()
-        Content()
-    }
-
-    @Composable
-    protected open fun ApplySystemUiColors() {
-        val systemUiController = rememberSystemUiController()
-        val statusBarColor = statusBarColor()
-        val statusBarDarkIcons = statusBarDarkIcons()
-        val navigationBarColor = navigationBarColor()
-        SideEffect {
-            systemUiController.setStatusBarColor(statusBarColor, statusBarDarkIcons)
-            systemUiController.setNavigationBarColor(navigationBarColor)
-        }
-    }
-
-    @Composable
-    protected abstract fun Content()
+    val event by viewModel.eventsStream.collectAsStateWithLifecycle(initialValue = EmptyEvent)
+    launchEvent(event)
 }

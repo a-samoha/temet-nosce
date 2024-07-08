@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.temetnosce.sadhana.BuildConfig
-import com.temetnosce.sadhana.presentation.core.ui.UiEffect
+import com.temetnosce.sadhana.presentation.core.ui.UiEvent
 import com.temetnosce.sadhana.presentation.core.ui.UiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-abstract class MviViewModel<S : UiState, E : UiEffect> : ViewModel() {
+abstract class ViewModel<S : UiState, E : UiEvent> : ViewModel() {
 
     abstract val initialState: S
 
@@ -28,8 +28,8 @@ abstract class MviViewModel<S : UiState, E : UiEffect> : ViewModel() {
     private val _uiState: MutableStateFlow<S> by lazy { MutableStateFlow(initialState) }
     val uiState: StateFlow<S> by lazy { _uiState.asStateFlow() }
 
-    private val _effectChannel: Channel<E> = Channel()
-    val effectStream: Flow<E> = _effectChannel.receiveAsFlow()
+    private val _eventsChannel: Channel<E> = Channel()
+    val eventsStream: Flow<E> = _eventsChannel.receiveAsFlow()
 
     /**
      * Updates the state atomically using the specified [mutation] of its value.
@@ -63,7 +63,7 @@ abstract class MviViewModel<S : UiState, E : UiEffect> : ViewModel() {
      */
     protected fun emitEffect(effect: E) {
         viewModelScope.launch(Dispatchers.Main.immediate) {
-            _effectChannel.send(effect)
+            _eventsChannel.send(effect)
         }
     }
 }

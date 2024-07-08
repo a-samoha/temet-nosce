@@ -38,39 +38,35 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.temetnosce.sadhana.R
-import com.temetnosce.sadhana.domain.model.DailyModel
 import com.temetnosce.sadhana.domain.model.SadhanaItemId
 import com.temetnosce.sadhana.domain.model.SadhanaItemModel
-import com.temetnosce.sadhana.presentation.core.ui.EmptyEffect
-import com.temetnosce.sadhana.presentation.core.ui.MviScreen
-import com.temetnosce.sadhana.presentation.screen.daily.DailyScreen.Companion.JAPA_ITEMS
-import com.temetnosce.sadhana.presentation.screen.daily.DailyScreen.Companion.SADHANA_ITEMS
-import com.temetnosce.sadhana.presentation.screen.daily.DailyScreen.Companion.SADHANA_ITEM_HEIGHT
+import com.temetnosce.sadhana.presentation.core.ui.Screen
 import com.temetnosce.sadhana.presentation.theme.SadhanaTheme
 import com.temetnosce.sadhana.presentation.theme.SadhanaTypography
+import org.koin.androidx.compose.koinViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class DailyScreen(
-    private val viewModel: DailyViewModel
-) : MviScreen<DailyUiState, EmptyEffect>(viewModel) {
+private val SADHANA_ITEM_HEIGHT = 48.dp
+private val SADHANA_ITEMS = 6
+private val JAPA_ITEMS = 4
 
-    @Composable
-    override fun Content() {
-        SadhanaTheme {
-            DailyScreenContent(
-                viewModel.uiState.collectAsStateWithLifecycle().value,
-                viewModel::onSadhanaItemValueChange,
-                viewModel::showTimePicker,
-                viewModel::onConfirmClick,
-            )
-        }
-    }
+@Composable
+fun DailyScreen() {
+    val viewModel = koinViewModel<DailyViewModel>()
 
-    companion object {
-        val SADHANA_ITEM_HEIGHT = 48.dp
-        val SADHANA_ITEMS = 6
-        val JAPA_ITEMS = 4
+    SadhanaTheme {
+        Screen(
+            viewModel = viewModel,
+            content = {
+                DailyScreenContent(
+                    viewModel.uiState.collectAsStateWithLifecycle().value,
+                    viewModel::onSadhanaItemValueChange,
+                    viewModel::showTimePicker,
+                    viewModel::onConfirmClick,
+                )
+            }
+        )
     }
 }
 
@@ -81,68 +77,73 @@ fun DailyScreenContent(
     showTimePicker: (SadhanaItemId, Boolean) -> Unit = { _, _ -> },
     onConfirmClick: () -> Unit = {},
 ) {
-    when (uiState) {
-        is DailyUiState.Uninitialized -> ShowLoading()
-        is DailyUiState.Content -> {
-            val items = uiState.content
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Title(R.string.sadhana_my_sadhana_today)
-                Column {
-                    repeat(SADHANA_ITEMS) { i -> // list item position from 0
-                        SadhanaItem(
-                            items[i],
-                            onValueChange = onSadhanaItemValueChange,
-                            showTimePicker = showTimePicker,
-                        )
-                    }
-                }
-                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
-                Spacer(modifier = Modifier.height(16.dp))
-                Column {
-                    repeat(JAPA_ITEMS) { i ->
-                        SadhanaItem(
-                            items[SADHANA_ITEMS + i],
-                            onValueChange = onSadhanaItemValueChange,
-                            showTimePicker = showTimePicker,
-                        )
-                    }
-                }
-                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
-                Spacer(modifier = Modifier.height(32.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround
-                ) {
-                    Text(
-                        text = stringResource(R.string.sadhana_per_month),
-                        style = SadhanaTypography.headlineSmall,
-                        color = colorResource(id = R.color.sadhana_primary_color),
-                    )
-                    Text(
-                        modifier = Modifier.clickable { onConfirmClick() },
-                        text = stringResource(R.string.sadhana_confirm),
-                        style = SadhanaTypography.headlineSmall,
-                        color = colorResource(id = R.color.sadhana_primary_color),
-                    )
-                }
-            }
+    // region Loading
+    if (uiState.isLoading) {
 
-            if (uiState.showTimePicker.second) {
-                val sadhanaItemId = uiState.showTimePicker.first
-                val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+    }
+    // endregion
 
-                TimePickerDialog(
-                    onCancel = { showTimePicker(sadhanaItemId, false) },
-                    onConfirm = { calendar ->
-                        onSadhanaItemValueChange(sadhanaItemId to formatter.format(calendar.time))
-                        showTimePicker(sadhanaItemId, false)
-                    },
+    // region TimePicker
+    if (uiState.showTimePicker.second) {
+        val sadhanaItemId = uiState.showTimePicker.first
+        val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+
+        TimePickerDialog(
+            onCancel = { showTimePicker(sadhanaItemId, false) },
+            onConfirm = { calendar ->
+                onSadhanaItemValueChange(sadhanaItemId to formatter.format(calendar.time))
+                showTimePicker(sadhanaItemId, false)
+            },
+        )
+    }
+    // endregion
+
+    // region Sadhana Items
+    val items = uiState.content
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Title(R.string.sadhana_my_sadhana_today)
+        Column {
+            repeat(SADHANA_ITEMS) { i -> // list item position from 0
+                SadhanaItem(
+                    items[i],
+                    onValueChange = onSadhanaItemValueChange,
+                    showTimePicker = showTimePicker,
                 )
             }
         }
+        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
+        Column {
+            repeat(JAPA_ITEMS) { i ->
+                SadhanaItem(
+                    items[SADHANA_ITEMS + i],
+                    onValueChange = onSadhanaItemValueChange,
+                    showTimePicker = showTimePicker,
+                )
+            }
+        }
+        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+        Spacer(modifier = Modifier.height(32.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            Text(
+                text = stringResource(R.string.sadhana_per_month),
+                style = SadhanaTypography.headlineSmall,
+                color = colorResource(id = R.color.sadhana_primary_color),
+            )
+            Text(
+                modifier = Modifier.clickable { onConfirmClick() },
+                text = stringResource(R.string.sadhana_confirm),
+                style = SadhanaTypography.headlineSmall,
+                color = colorResource(id = R.color.sadhana_primary_color),
+            )
+        }
     }
+    // endregion
 }
 
 @Composable
@@ -230,6 +231,7 @@ fun IconOrText(
                 )
             }
         }
+
         item.timeLabelResId != null -> {
             Row(
                 horizontalArrangement = Arrangement.End,
@@ -279,17 +281,20 @@ fun ValueContainer(
             checked = item.value == true,
             onCheckedChange = { onValueChange(item.id to it) },
         )
+
         else -> SadhanaTextField(
             value = item.value.toString(),
             onValueChange = { onValueChange(item.id to it) },
             enabled = when (item.id) {
                 SadhanaItemId.MORNING_RISE,
                 SadhanaItemId.LIGHTS_OUT -> false
+
                 else -> true
             },
             modifier = when (item.id) {
                 SadhanaItemId.MORNING_RISE,
                 SadhanaItemId.LIGHTS_OUT -> Modifier.clickable { showTimePicker(item.id, true) }
+
                 else -> Modifier
             },
             keyboardOptions = when (item.id) {
@@ -298,6 +303,7 @@ fun ValueContainer(
                 SadhanaItemId.JAPA_10,
                 SadhanaItemId.JAPA_18,
                 SadhanaItemId.JAPA_24 -> KeyboardOptions(keyboardType = KeyboardType.Number)
+
                 else -> KeyboardOptions.Default
             },
             placeholderText = when (item.id) {
@@ -361,8 +367,6 @@ private fun SadhanaTextField(
 @Preview(showSystemUi = true)
 private fun PreviewScreenContent() {
     DailyScreenContent(
-        uiState = DailyUiState.Content(
-            content = DailyModel.EMPTY.toSadhanaItemsList()
-        )
+        uiState = DailyUiState()
     )
 }
